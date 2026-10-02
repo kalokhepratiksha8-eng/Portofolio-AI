@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Portfolio.AI — a transparent, interactive career portfolio review.">
+<title>Portfolio.AI — Career Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --bg-deep:    #171102;
+  --bg-card:    rgba(42,34,15,0.8);
+  --bg-glass:   rgba(255,255,255,0.04);
+  --border:     rgba(255,255,255,0.08);
+  --border-glow:rgba(246,92,123,0.5);
+  --purple:     #f65c7b;
+  --purple-light:#fa8ba1;
+  --blue:       #f6be3b;
+  --cyan:       #d49606;
+  --pink:       #ec4869;
+  --gold:       #f5af0b;
+  --green:      #b98610;
+  --text:       #f9f7f1;
+  --text-muted: #b8ad94;
+  --text-dim:   #695f47;
+  --grad-1: linear-gradient(135deg,#f65c7b,#f6be3b);
+  --grad-2: linear-gradient(135deg,#ec4869,#f65c7b);
+  --grad-3: linear-gradient(135deg,#d49606,#f65c7b);
+  --grad-hero: linear-gradient(135deg,#29200c,#63522b,#3e3624);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--bg-deep);
+  color:var(--text);
+  overflow-x:hidden;
+  line-height:1.6;
+}
+
+/* ── CANVAS BG ── */
+#bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* ── AURORA BG ── */
+.aurora{
+  position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+}
+.aurora-blob{
+  position:absolute;border-radius:50%;filter:blur(80px);opacity:0.15;
+  animation:aurora-drift 12s ease-in-out infinite;
+}
+.aurora-blob:nth-child(1){
+  width:600px;height:600px;
+  background:radial-gradient(circle,#f65c7b,transparent);
+  top:-200px;left:-100px;animation-delay:0s;
+}
+.aurora-blob:nth-child(2){
+  width:500px;height:500px;
+  background:radial-gradient(circle,#f6be3b,transparent);
+  top:200px;right:-100px;animation-delay:-4s;
+}
+.aurora-blob:nth-child(3){
+  width:400px;height:400px;
+  background:radial-gradient(circle,#ec4869,transparent);
+  bottom:0;left:30%;animation-delay:-8s;
+}
+@keyframes aurora-drift{
+  0%,100%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(40px,-30px) scale(1.05)}
+  66%{transform:translate(-30px,40px) scale(0.95)}
+}
+
+/* ── NAVBAR ── */
+.navbar{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  padding:0 2rem;
+  background:rgba(23,17,2,0.7);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  transition:all .3s;
+}
+.nav-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  max-width:1200px;margin:0 auto;height:68px;
+}
+.nav-brand{
+  font-family:'Space Grotesk',sans-serif;
+  font-weight:700;font-size:1.4rem;
+  background:var(--grad-1);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;text-decoration:none;letter-spacing:-0.5px;
+}
+.nav-links{display:flex;align-items:center;gap:0.3rem;list-style:none}
+.nav-links a{
+  color:var(--text-muted);text-decoration:none;
+  font-size:0.875rem;font-weight:500;
+  padding:6px 14px;border-radius:8px;
+  transition:all .2s;
+}
+.nav-links a:hover{color:var(--text);background:var(--bg-glass)}
+.nav-links a.active{color:var(--purple-light);background:rgba(246,92,123,0.12)}
+.btn-nav{
+  padding:8px 18px;border-radius:10px;font-size:0.82rem;font-weight:600;
+  background:var(--grad-1);color:#ffffff;border:none;cursor:pointer;
+  font-family:'Inter',sans-serif;
+  transition:all .2s;box-shadow:0 0 20px rgba(246,92,123,0.3);
+}
+.btn-nav:hover{transform:translateY(-1px);box-shadow:0 0 30px rgba(246,92,123,0.5)}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  text-align:center;
+  padding:7rem 1rem 4rem;
+  position:relative;z-index:1;
+}
+.hero-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(246,92,123,0.12);
+  border:1px solid rgba(246,92,123,0.3);
+  color:var(--purple-light);
+  padding:6px 16px;border-radius:50px;
+  font-size:0.78rem;font-weight:600;letter-spacing:0.5px;
+  margin-bottom:1.8rem;
+  animation:fadeInDown .7s ease both;
+}
+.pill-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--green);
+  animation:pulse-dot 1.5s ease infinite;
+}
+@keyframes pulse-dot{
+  0%,100%{box-shadow:0 0 0 0 rgba(185,134,16,0.6)}
+  50%{box-shadow:0 0 0 5px rgba(185,134,16,0)}
+}
+.hero-title{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:clamp(2.8rem,7vw,5.5rem);
+  font-weight:800;line-height:1.08;
+  letter-spacing:-2px;
+  animation:fadeInUp .8s ease .1s both;
+}
+.hero-title .line1{color:var(--text)}
+.hero-title .grad-text{
+  background:linear-gradient(90deg,#f65c7b,#f6be3b,#d49606);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  background-size:200%;
+  animation:gradient-shift 3s ease infinite;
+}
+@keyframes gradient-shift{
+  0%{background-position:0%}
+  50%{background-position:100%}
+  100%{background-position:0%}
+}
+.hero-sub{
+  font-size:1.15rem;color:var(--text-muted);
+  max-width:580px;margin:1.4rem auto 2.5rem;
+  line-height:1.7;
+  animation:fadeInUp .8s ease .25s both;
+}
+.hero-cta{
+  display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;
+  animation:fadeInUp .8s ease .4s both;
+}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--grad-1);color:#ffffff;
+  padding:14px 32px;border-radius:12px;
+  font-weight:700;font-size:0.95rem;text-decoration:none;
+  box-shadow:0 0 30px rgba(246,92,123,0.4),0 4px 15px rgba(0,0,0,0.3);
+  transition:all .3s;position:relative;overflow:hidden;
+}
+.btn-primary::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.1),transparent);
+  opacity:0;transition:opacity .3s;
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 50px rgba(246,92,123,0.6),0 8px 25px rgba(0,0,0,0.4);color:#ffffff}
+.btn-primary:hover::before{opacity:1}
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid var(--border);color:var(--text-muted);
+  padding:14px 32px;border-radius:12px;
+  font-weight:600;font-size:0.95rem;text-decoration:none;
+  backdrop-filter:blur(10px);background:var(--bg-glass);
+  transition:all .3s;
+}
+.btn-ghost:hover{border-color:rgba(246,92,123,0.5);color:var(--text);background:rgba(246,92,123,0.08)}
+
+/* floating badges */
+.hero-badges{
+  display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;
+  margin-top:3rem;
+  animation:fadeInUp .8s ease .6s both;
+}
+.badge-item{
+  display:flex;align-items:center;gap:6px;
+  background:var(--bg-glass);border:1px solid var(--border);
+  backdrop-filter:blur(10px);
+  padding:8px 16px;border-radius:50px;
+  font-size:0.78rem;color:var(--text-muted);font-weight:500;
+}
+.badge-item i{font-size:0.85rem}
+
+/* ── KEYFRAMES ── */
+@keyframes fadeInUp{
+  from{opacity:0;transform:translateY(32px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes fadeInDown{
+  from{opacity:0;transform:translateY(-20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes slideInLeft{
+  from{opacity:0;transform:translateX(-40px)}
+  to{opacity:1;transform:translateX(0)}
+}
+@keyframes slideInRight{
+  from{opacity:0;transform:translateX(40px)}
+  to{opacity:1;transform:translateX(0)}
+}
+
+/* ── SCROLL REVEAL ── */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-l{opacity:0;transform:translateX(-40px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
+.reveal-l.visible{opacity:1;transform:translateX(0)}
+.reveal-r{opacity:0;transform:translateX(40px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
+.reveal-r.visible{opacity:1;transform:translateX(0)}
+.reveal-scale{opacity:0;transform:scale(.85);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
+.reveal-scale.visible{opacity:1;transform:scale(1)}
+
+/* ── SECTIONS ── */
+section{padding:6rem 1.5rem;position:relative;z-index:1}
+.section-wrap{max-width:1200px;margin:0 auto}
+.section-eyebrow{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:0.75rem;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;
+  background:var(--grad-1);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;margin-bottom:1rem;
+}
+.section-title{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:clamp(1.8rem,4vw,2.8rem);
+  font-weight:700;letter-spacing:-1px;
+  margin-bottom:.8rem;color:var(--text);
+}
+.section-sub{color:var(--text-muted);font-size:1rem;max-width:520px;margin:0 auto 3.5rem;line-height:1.7}
+
+/* ── DIVIDER ── */
+.divider-line{
+  width:100%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--border),transparent);
+  margin:0;
+}
+
+/* ── FEATURE CARDS (Glassmorphism + 3D tilt) ── */
+.features-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:1.5rem;
+}
+.feat-card{
+  background:var(--bg-glass);
+  border:1px solid var(--border);
+  border-radius:20px;padding:2rem 1.6rem;
+  backdrop-filter:blur(20px);
+  transition:all .4s cubic-bezier(.16,1,.3,1);
+  cursor:default;position:relative;overflow:hidden;
+  transform-style:preserve-3d;
+}
+.feat-card::before{
+  content:'';position:absolute;inset:0;border-radius:20px;
+  background:var(--grad-1);opacity:0;transition:opacity .4s;z-index:0;
+}
+.feat-card::after{
+  content:'';
+  position:absolute;top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.05),transparent);
+  transition:left .6s ease;
+}
+.feat-card:hover::after{left:100%}
+.feat-card:hover{
+  border-color:rgba(246,92,123,0.4);
+  box-shadow:0 0 0 1px rgba(246,92,123,0.2),0 20px 60px rgba(246,92,123,0.15),0 8px 20px rgba(0,0,0,0.4);
+  transform:translateY(-8px);
+}
+.feat-card>*{position:relative;z-index:1}
+.feat-icon{
+  width:52px;height:52px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;margin-bottom:1.2rem;
+}
+.ic-purple{background:rgba(246,92,123,0.15);color:var(--purple-light)}
+.ic-blue{background:rgba(246,190,59,0.15);color:#facc60}
+.ic-cyan{background:rgba(212,150,6,0.15);color:#eeb122}
+.ic-pink{background:rgba(236,72,105,0.15);color:#f4728c}
+.feat-card h3{font-size:1rem;font-weight:700;margin-bottom:.5rem;color:var(--text)}
+.feat-card p{font-size:.85rem;color:var(--text-muted);line-height:1.65}
+.feat-tag{
+  display:inline-block;margin-top:.8rem;
+  font-size:.7rem;font-weight:600;
+  padding:3px 10px;border-radius:6px;
+  background:rgba(246,92,123,0.12);color:var(--purple-light);
+  border:1px solid rgba(246,92,123,0.2);
+}
+
+/* ── STEPS ── */
+.steps-row{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:2rem;max-width:900px;margin:0 auto;position:relative;
+}
+.steps-row::after{
+  content:'';position:absolute;
+  top:36px;left:20%;right:20%;height:2px;
+  background:linear-gradient(90deg,var(--purple),var(--cyan));
+  opacity:.25;z-index:0;
+}
+.step{text-align:center;position:relative;z-index:1}
+.step-circle{
+  width:72px;height:72px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 1.2rem;font-size:1.5rem;font-weight:800;
+  font-family:'Space Grotesk',sans-serif;
+  color:#ffffff;position:relative;
+  transition:transform .3s;
+}
+.step-circle::before{
+  content:'';position:absolute;inset:-3px;border-radius:50%;
+  background:var(--grad-1);z-index:-1;
+  animation:spin-border 4s linear infinite;
+}
+.step-circle::after{
+  content:'';position:absolute;inset:0;border-radius:50%;
+  background:var(--bg-deep);z-index:-1;margin:3px;
+}
+.step:hover .step-circle{transform:scale(1.1)}
+@keyframes spin-border{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.step-num{position:relative;z-index:1;font-size:1.3rem;font-weight:800;
+  background:var(--grad-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.step h4{font-size:1rem;font-weight:700;margin-bottom:.4rem}
+.step p{font-size:.83rem;color:var(--text-muted);line-height:1.6}
+
+/* ── STATS ── */
+.stats-bg{
+  background:linear-gradient(135deg,rgba(246,92,123,.06),rgba(246,190,59,.06));
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+}
+.stats-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:0;max-width:900px;margin:0 auto;
+}
+.stat-box{
+  text-align:center;padding:3rem 1.5rem;
+  border-right:1px solid var(--border);
+  transition:background .3s;
+}
+.stat-box:last-child{border-right:none}
+.stat-box:hover{background:rgba(246,92,123,.05)}
+.stat-num{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:3rem;font-weight:800;display:block;
+  background:linear-gradient(135deg,var(--purple-light),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;line-height:1;
+}
+.stat-label{font-size:.82rem;color:var(--text-muted);margin-top:.5rem;font-weight:500}
+.sample-footnote{text-align:center;color:var(--text-dim);font-size:.64rem;letter-spacing:.15px;margin:0 auto 12px}
+
+/* ── TESTIMONIALS ── */
+.testimonials-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));
+  gap:1.5rem;max-width:1000px;margin:0 auto;
+}
+.testi-card{
+  background:var(--bg-glass);border:1px solid var(--border);
+  border-radius:20px;padding:1.8rem;
+  backdrop-filter:blur(20px);
+  transition:all .4s;position:relative;overflow:hidden;
+}
+.testi-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--grad-1);opacity:0;transition:opacity .3s;
+}
+.testi-card:hover{transform:translateY(-4px);border-color:rgba(246,92,123,.3)}
+.testi-card:hover::before{opacity:1}
+.quote-icon{font-size:2rem;color:var(--purple);opacity:.4;margin-bottom:.8rem;line-height:1}
+.testi-card p{font-size:.88rem;color:var(--text-muted);line-height:1.75;margin-bottom:1.2rem}
+.testi-author{display:flex;align-items:center;gap:10px}
+.avatar{
+  width:40px;height:40px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:.82rem;color:#ffffff;flex-shrink:0;
+}
+.av1{background:var(--grad-1)}
+.av2{background:var(--grad-2)}
+.av3{background:var(--grad-3)}
+.author-info .name{font-size:.88rem;font-weight:700}
+.author-info .role{font-size:.75rem;color:var(--text-dim)}
+.stars{color:var(--gold);font-size:.75rem;margin-bottom:.6rem;letter-spacing:1px}
+
+/* ── TECH TAGS ── */
+.tags-wrap{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center;max-width:800px;margin:0 auto}
+.tech-tag{
+  padding:7px 16px;border-radius:8px;font-size:.78rem;font-weight:600;
+  border:1px solid;transition:all .2s;cursor:default;
+}
+.tag-purple{background:rgba(246,92,123,.1);color:var(--purple-light);border-color:rgba(246,92,123,.25)}
+.tag-blue{background:rgba(246,190,59,.1);color:#facc60;border-color:rgba(246,190,59,.25)}
+.tag-cyan{background:rgba(212,150,6,.1);color:#eeb122;border-color:rgba(212,150,6,.25)}
+.tag-pink{background:rgba(236,72,105,.1);color:#f4728c;border-color:rgba(236,72,105,.25)}
+.tag-green{background:rgba(185,134,16,.1);color:#d3a334;border-color:rgba(185,134,16,.25)}
+.tag-gold{background:rgba(245,175,11,.1);color:#fbba24;border-color:rgba(245,175,11,.25)}
+.tech-tag:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(246,92,123,.2)}
+
+/* ── CTA ── */
+.cta-wrap{
+  max-width:860px;margin:0 auto;
+  background:linear-gradient(135deg,rgba(246,92,123,.15),rgba(246,190,59,.1));
+  border:1px solid rgba(246,92,123,.25);
+  border-radius:28px;padding:4rem 2rem;text-align:center;
+  position:relative;overflow:hidden;
+  backdrop-filter:blur(20px);
+}
+.cta-wrap::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 0%,rgba(246,92,123,.15),transparent 70%);
+}
+.cta-wrap>*{position:relative;z-index:1}
+.cta-wrap h2{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,4vw,2.5rem);font-weight:700;letter-spacing:-1px;margin-bottom:.8rem}
+.cta-wrap p{color:var(--text-muted);margin-bottom:2rem;font-size:.95rem}
+.cta-glow{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--grad-1);color:#ffffff;padding:15px 36px;border-radius:14px;
+  font-weight:700;font-size:1rem;text-decoration:none;
+  box-shadow:0 0 40px rgba(246,92,123,.5),0 8px 25px rgba(0,0,0,.4);
+  transition:all .3s;
+}
+.cta-glow:hover{transform:translateY(-3px);box-shadow:0 0 70px rgba(246,92,123,.7),0 12px 35px rgba(0,0,0,.5);color:#ffffff}
+
+/* ── FOOTER ── */
+footer{
+  text-align:center;padding:2rem;
+  color:var(--text-dim);font-size:.82rem;
+  border-top:1px solid var(--border);
+  position:relative;z-index:1;
+}
+footer span{
+  background:var(--grad-1);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  font-weight:700;
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  .nav-links li:not(:last-child){display:none}
+  .steps-row::after{display:none}
+  .stat-box{border-right:none;border-bottom:1px solid var(--border);padding:2rem}
+  .stat-box:last-child{border-bottom:none}
+}
+@media(max-width:480px){
+  .features-grid{grid-template-columns:1fr}
+  .hero-cta{flex-direction:column;align-items:center}
+  .hero-badges{display:none}
+}
+
+/* ── Portfolio.AI 2.0 progressive visual layer ── */
+:root{--bg-deep:#120f08;--bg-card:rgba(34,29,18,.88);--bg-glass:rgba(255,255,255,.035);--border:rgba(255,255,255,.09);--text:#f8f7f4;--text-muted:#a5adbd;--text-dim:#737d91;--purple:#ff839c;--purple-light:#ffadbd;--blue:#ffd36d;--cyan:#d9b560}
+body{background:radial-gradient(ellipse at 55% 5%,rgba(157,129,64,.13),transparent 36%),var(--bg-deep);line-height:1.65}
+.navbar{background:rgba(18,15,8,.76);border-bottom-color:rgba(255,255,255,.08)}.nav-inner{height:72px}.nav-brand{font-size:1.28rem}.nav-links{gap:.18rem}.nav-links a{padding:7px 10px;font-size:.81rem}.nav-links a:hover{background:rgba(255,255,255,.06)}.nav-links a.active{color:#ffb5c4;background:rgba(246,92,123,.12)}
+.theme-toggle,.menu-toggle{width:38px;height:38px;border-radius:11px;color:var(--text);border:1px solid var(--border);background:rgba(255,255,255,.045);cursor:pointer;font-size:1rem;transition:.2s}.theme-toggle:hover,.menu-toggle:hover{border-color:var(--border-glow);transform:translateY(-2px)}.menu-toggle{display:none}.btn-nav,.cta-glow,.btn-primary{background:linear-gradient(118deg,#ff97ac,#ffd677);color:#1b1810;box-shadow:0 8px 28px rgba(234,193,98,.25);transition:transform .22s,box-shadow .22s}.btn-nav:hover,.cta-glow:hover,.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(234,193,98,.38);color:#1b1810}
+.hero{min-height:680px;max-width:1240px;display:grid;grid-template-columns:1.05fr .95fr;gap:2rem;text-align:left;padding-top:110px;padding-bottom:95px}.hero>div:first-child{text-align:left}.hero-title{font-size:clamp(3.1rem,6.5vw,5.7rem);letter-spacing:-.065em}.hero-sub{max-width:550px}.hero-pill{border-color:rgba(255,145,167,.25);background:rgba(240,100,128,.09)}.hero-cta{justify-content:flex-start}.hero-badges{justify-content:flex-start;gap:.55rem}.badge-item{background:rgba(255,255,255,.035);border-color:rgba(255,255,255,.09)}.grad-text{background-image:linear-gradient(90deg,#ffafbf,#ffdf94,#e5c883);text-shadow:0 0 30px rgba(255,130,155,.16)}
+.hero-visual{height:450px;position:relative;display:grid;place-items:center;isolation:isolate}.hero-visual:before{content:"";position:absolute;width:330px;height:330px;border-radius:50%;background:radial-gradient(circle,rgba(213,177,94,.25),rgba(177,135,36,.06) 50%,transparent 70%);filter:blur(10px);animation:core-breathe 6s ease-in-out infinite}.hero-orbit{position:absolute;width:380px;height:380px;border-radius:50%;border:1px solid rgba(255,146,168,.13);animation:slow-spin 30s linear infinite}.hero-orbit:before,.hero-orbit:after{content:"";position:absolute;width:9px;height:9px;border-radius:50%;background:#ff95aa;box-shadow:0 0 18px #ff8aa1}.hero-orbit:before{top:12%;left:20%}.hero-orbit:after{bottom:19%;right:1%;background:#d8b259;box-shadow:0 0 15px #d8b259}.hero-core{position:relative;z-index:1;width:270px;min-height:230px;padding:23px;border:1px solid rgba(255,255,255,.14);border-radius:25px;background:linear-gradient(145deg,rgba(46,40,26,.93),rgba(28,24,14,.94));box-shadow:0 25px 90px #0000008,inset 0 1px #ffffff18;display:flex;flex-direction:column;align-items:center;justify-content:center;backdrop-filter:blur(18px);animation:core-float 7s ease-in-out infinite}.hero-core>b{font:700 .78rem 'Space Grotesk',sans-serif;letter-spacing:1.4px;margin-top:9px}.hero-core>small{color:var(--text-muted);font-size:.68rem;text-align:center}.core-rings{width:72px;height:72px;border-radius:50%;display:grid;place-items:center;border:1px solid #ff95aa77;box-shadow:0 0 20px #f65c7b33,inset 0 0 22px #f65c7b22;position:relative;color:#ffc6d1;font-size:1.8rem}.core-rings:before{content:"";position:absolute;inset:-7px;border-radius:50%;border:1px dashed #ffd36d6b;animation:slow-spin 14s linear infinite}.core-bars{display:flex;gap:5px;margin:13px 0}.core-bars i{width:32px;height:3px;border-radius:5px;background:#ffd77a;animation:bar-wave 1.2s ease-in-out infinite alternate}.core-bars i:nth-child(2){animation-delay:.2s;background:#ffd471}.core-bars i:nth-child(3){animation-delay:.4s;background:#d4b262}.core-bars i:nth-child(4){animation-delay:.6s;background:#db8d9d}.sample-chip,.demo-label{font-size:.55rem;letter-spacing:.9px;color:#c5bca7;border:1px solid #ffffff16;border-radius:99px;padding:4px 8px}.hero-float{position:absolute;z-index:2;display:flex;gap:10px;align-items:center;padding:11px 13px;border:1px solid #ffffff16;border-radius:14px;background:rgba(37,32,20,.92);backdrop-filter:blur(14px);box-shadow:0 14px 40px #0000005;animation:float-card 6s ease-in-out infinite}.hero-float b{display:block;font-size:.69rem}.hero-float small{display:block;color:var(--text-dim);font-size:.57rem}.hero-float>strong{font:700 .95rem 'Space Grotesk',sans-serif;color:#ffadbd;margin-left:7px}.hero-float>strong small{display:inline;color:var(--text-dim);font-size:.57rem;font-weight:500}.float-icon{width:27px;height:27px;border-radius:9px;background:#ff819a24;color:#ffadbd;display:grid;place-items:center}.float-icon.pink{background:#ec486924;color:#ff9db1}.float-icon.cyan{background:#d4960624;color:#edc464}.float-icon.blue{background:#f6be3b24;color:#ffd779}.hero-float-one{top:38px;left:0}.hero-float-two{top:75px;right:-2px;animation-delay:-1s}.hero-float-three{bottom:49px;left:-17px;animation-delay:-2s}.hero-float-four{bottom:72px;right:-16px;animation-delay:-3.1s}@keyframes float-card{50%{transform:translateY(-9px)}}@keyframes core-float{50%{transform:translateY(-6px) rotateY(-3deg)}}@keyframes core-breathe{50%{transform:scale(1.12);opacity:.8}}@keyframes slow-spin{to{transform:rotate(360deg)}}@keyframes bar-wave{to{transform:scaleX(.5);opacity:.5}}
+section{scroll-margin-top:80px}.section-wrap{max-width:1180px}.section-title{letter-spacing:-.045em}.section-sub{max-width:650px}.section-head{text-align:center}.divider-line{background:linear-gradient(90deg,transparent,rgba(255,143,165,.25),rgba(207,172,90,.2),transparent);height:1px;position:relative}.divider-line:after{content:"";position:absolute;left:50%;top:-1px;width:90px;height:2px;background:linear-gradient(90deg,transparent,#ff8da4,transparent);transform:translateX(-50%);animation:divider-flow 5s linear infinite}@keyframes divider-flow{0%{opacity:.25;transform:translateX(-120px)}50%{opacity:1}100%{opacity:.25;transform:translateX(30px)}}
+.feat-card{cursor:pointer;background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.012));border-color:rgba(255,255,255,.09)}.feat-card:before{background:radial-gradient(circle at var(--px,50%) var(--py,0%),rgba(255,105,135,.18),transparent 55%)}.feat-card:hover{border-color:rgba(255,139,162,.4)}.feat-icon{animation:icon-bob 4s ease-in-out infinite}.feat-card:nth-child(2) .feat-icon{animation-delay:-1s}.feat-card:nth-child(3) .feat-icon{animation-delay:-2s}.feat-card:nth-child(4) .feat-icon{animation-delay:-3s}@keyframes icon-bob{50%{transform:translateY(-3px) rotate(-3deg)}}.module-preview{margin-top:1.05rem;padding-top:.9rem;border-top:1px solid rgba(255,255,255,.08);display:grid;gap:.55rem}.preview-score{display:flex;align-items:center;gap:10px}.preview-score>span:last-child b{display:block;font-size:.72rem}.preview-score>span:last-child small{display:block;font-size:.61rem;color:var(--text-dim)}.score-ring{width:43px;height:43px;border-radius:50%;display:grid;place-items:center;position:relative;background:conic-gradient(#ff91a7 0deg,rgba(255,255,255,.09) 0deg);flex:0 0 auto}.score-ring:before{content:"";position:absolute;inset:4px;border-radius:50%;background:#221d11}.score-ring b{position:relative;z-index:1;font:700 .75rem 'Space Grotesk',sans-serif}.pink-ring{background:conic-gradient(#ed768e 0deg,rgba(255,255,255,.09) 0deg)}.blue-ring{background:conic-gradient(#ffd46e 0deg,rgba(255,255,255,.09) 0deg)}.cyan-ring{background:conic-gradient(#d5ad50 0deg,rgba(255,255,255,.09) 0deg)}.mini-metric{display:grid;grid-template-columns:1fr 78px;align-items:center;gap:9px;font-size:.62rem;color:var(--text-muted)}.mini-metric i,.readiness-metric i,.skill-row i,.job-bar,.report-modules i{height:5px;border-radius:9px;background:rgba(255,255,255,.09);overflow:hidden;display:block}.mini-metric i b,.readiness-metric i b,.skill-row i b,.job-bar i,.report-modules em{height:100%;width:0;display:block;border-radius:inherit;background:linear-gradient(90deg,#f2758e,#cfaf65);transition:width 1.15s cubic-bezier(.2,.7,.2,1)}.feature-more,.job-detail,.recommend-more{background:none;border:0;padding:3px 0;color:#ffb4c3;font-size:.67rem;font-weight:700;text-align:left;cursor:pointer}.feature-more span{margin-left:5px}.feature-more:hover,.job-detail:hover,.recommend-more:hover{color:#ffffff}
+.scan-section{padding:5.2rem 1.5rem;position:relative;z-index:1}.scan-heading{text-align:center}.scan-board{max-width:1020px;min-height:315px;margin:0 auto;display:grid;grid-template-columns:145px 1fr 190px;grid-template-rows:1fr auto;align-items:center;gap:22px;position:relative;padding:36px;border:1px solid var(--border);border-radius:24px;overflow:hidden;background:radial-gradient(ellipse at 50% 40%,rgba(217,89,115,.10),transparent 54%),rgba(255,255,255,.018);isolation:isolate}.scan-user,.scan-engine,.scan-sources,.scan-result{position:relative;z-index:2}.scan-user{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}.scan-node-icon{width:48px;height:48px;border-radius:15px;border:1px solid #ffffff18;background:#ff8ba215;color:#ffb0c0;display:grid;place-items:center;font-size:1.35rem}.scan-user b,.scan-engine>b{font-size:.67rem;letter-spacing:.8px}.scan-user small,.scan-engine small{font-size:.62rem;color:var(--text-dim)}.scan-engine{justify-self:center;text-align:center;width:min(100%,330px);padding:19px;border-radius:18px;background:rgba(29,24,14,.89);border:1px solid rgba(255,140,163,.2);box-shadow:0 0 38px #f1718b11}.engine-orbit{width:48px;height:48px;display:grid;place-items:center;border-radius:50%;margin:0 auto 7px;border:1px solid #ff9aae77;color:#ffb8c6;font-size:1.3rem;position:relative}.engine-orbit:after{content:"";position:absolute;inset:-5px;border:1px dotted #dabc7688;border-radius:50%;animation:slow-spin 8s linear infinite}.scan-progress{height:3px;border-radius:5px;background:#ffffff12;margin:12px 0;overflow:hidden}.scan-progress i{display:block;width:0;height:100%;background:linear-gradient(90deg,#ff8ea5,#d9b562);transition:width .4s}.scan-button{border:1px solid rgba(255,151,172,.3);border-radius:9px;padding:8px 12px;color:#ffe2e8;background:#ec778e1a;cursor:pointer;font-size:.68rem;font-weight:700}.scan-button:hover{background:#ec778e36}.scan-sources{display:grid;gap:9px}.scan-source{display:flex;align-items:center;gap:9px;padding:8px 10px;border:1px solid #ffffff10;border-radius:10px;background:#ffffff04;font-size:.7rem;color:var(--text-muted);transition:.3s}.scan-source span{width:23px;height:23px;border-radius:7px;display:grid;place-items:center;background:#ff7f9918;color:#ffafbf}.scan-source i{font-style:normal;margin-left:auto;color:#5f687b}.scan-source.active{border-color:#e1c37d77;background:#e1c37d0e;color:var(--text)}.scan-source.active i{color:#e1c37d}.scan-result{grid-column:1/-1;justify-self:center;display:flex;align-items:center;gap:9px;padding:8px 13px;border-radius:10px;background:#e0be6e0b;border:1px solid #e0be6e22;opacity:0;transform:translateY(6px);transition:.3s}.scan-result.visible{opacity:1;transform:none}.scan-result>span{color:#e1c37d}.scan-result b{font-size:.72rem}.scan-result small{font-size:.63rem;color:var(--text-dim)}.scan-sweep{position:absolute;z-index:1;left:0;right:0;height:1px;top:-10%;background:linear-gradient(90deg,transparent,#e0be6ecc,transparent);box-shadow:0 0 15px #e0be6eaa;opacity:0}.scan-board.scanning .scan-sweep{opacity:1;animation:sweep 1.6s ease-in-out 4}@keyframes sweep{to{top:110%}}.scan-wire{position:absolute;left:18%;right:24%;top:48%;height:1px;background:linear-gradient(90deg,#fa8ba144,#ddbe7544);z-index:0}.wire-a:before,.wire-a:after{content:"";position:absolute;left:12%;top:-2px;width:5px;height:5px;border-radius:50%;background:#ff9baf;box-shadow:0 0 10px #ff9baf;animation:flow-point 2s linear infinite}.wire-a:after{animation-delay:1s}@keyframes flow-point{to{left:88%;opacity:.15}}
+.career-section,.jobs-section,.skills-section,.recommend-section,.dash-preview-section{padding:5.4rem 1.5rem;position:relative;z-index:1}.readiness-grid{max-width:870px;margin:auto;display:grid;grid-template-columns:.9fr 1.1fr;gap:25px;padding:25px;border:1px solid var(--border);border-radius:22px;background:rgba(255,255,255,.025)}.readiness-card{border-radius:17px;padding:20px;text-align:center;background:rgba(255,255,255,.02);border:1px solid #ffffff0b}.demo-label{display:inline-flex;margin:0 auto 15px;color:#f0cf83;border-color:#f0cf8333;background:#f0cf830b}.readiness-gauge{width:168px;height:168px;border-radius:50%;margin:0 auto 14px;display:grid;place-items:center;background:conic-gradient(#ff91a7 0deg,rgba(255,255,255,.08) 0);position:relative}.readiness-gauge:before{content:"";position:absolute;inset:9px;border-radius:50%;background:#201b10}.readiness-gauge>div{z-index:1;display:flex;flex-direction:column;align-items:center}.readiness-gauge b{font:700 2.4rem 'Space Grotesk',sans-serif}.readiness-gauge small{font-size:.55rem;color:var(--text-muted);letter-spacing:1px}.readiness-card h3{font-size:.9rem;margin:0 0 5px}.readiness-card p{font-size:.7rem;color:var(--text-muted);margin:0}.readiness-details{display:flex;flex-direction:column;justify-content:center;gap:19px;padding:14px}.readiness-metric{display:grid;grid-template-columns:1fr 38px;gap:7px 12px;align-items:center;font-size:.74rem;color:var(--text-muted)}.readiness-metric i{grid-column:1;grid-row:2;height:6px}.readiness-metric strong{grid-column:2;grid-row:1/3;color:#ffcbd5;font-size:.78rem}.readiness-note{font-size:.66rem;color:var(--text-dim);border-top:1px solid var(--border);padding-top:12px}.jobs-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.job-card,.recommend-card{padding:19px;border:1px solid var(--border);border-radius:17px;background:linear-gradient(145deg,rgba(255,255,255,.04),rgba(255,255,255,.013));transition:.3s;position:relative;overflow:hidden}.job-card:hover,.recommend-card:hover{transform:translateY(-5px);border-color:#ff8ba255;box-shadow:0 18px 42px #0000003}.job-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}.job-icon,.recommend-icon{width:36px;height:36px;border-radius:11px;background:#fa8ba11e;color:#ffb4c3;display:grid;place-items:center;font-weight:700}.blue-job{background:#ffcd5722;color:#ffdc89}.mint-job{background:#e0b34a1e;color:#dfbf73}.pink-job{background:#f26b861e;color:#ff9baf}.match-pill{font:700 .82rem 'Space Grotesk',sans-serif;color:#e1c78c}.match-pill small{display:block;text-align:right;font:500 .53rem 'Inter',sans-serif;color:var(--text-dim)}.job-card h3{font-size:.84rem;margin:0 0 6px}.job-card>p{font-size:.68rem;color:var(--text-muted);min-height:42px;margin:0 0 11px}.job-skills{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:13px}.job-skills span,.gap-tags span{border:1px solid var(--border);background:#ffffff05;color:var(--text-muted);border-radius:99px;padding:3px 7px;font-size:.57rem}.job-bar{margin:0 0 9px;height:4px}.job-detail{font-size:.62rem}.skills-grid{max-width:900px;margin:auto;display:grid;grid-template-columns:1fr 1fr;gap:16px}.skills-panel,.gaps-panel{border:1px solid var(--border);border-radius:18px;background:rgba(255,255,255,.022);padding:22px}.skills-panel h3,.gaps-panel h3{font:700 .83rem 'Space Grotesk',sans-serif;margin:0 0 18px}.skills-panel h3 span,.gaps-panel h3 span{float:right;font:600 .53rem 'Inter',sans-serif;color:#d8bc79;letter-spacing:.7px}.skill-row{display:grid;grid-template-columns:85px 1fr 36px;align-items:center;gap:10px;margin:15px 0;font-size:.69rem}.skill-row i{height:6px}.skill-row strong{font-size:.65rem;color:#ffbfcc}.gaps-panel p{font-size:.7rem;color:var(--text-muted)}.gap-tags{display:flex;flex-wrap:wrap;gap:8px}.gap-tags span{padding:6px 10px;border-color:#f0cf832b;color:#f0d698;background:#f0cf830b}.gap-tip{font-size:.66rem;color:#ddca9c;margin-top:22px;padding:10px;background:#d7b6690b;border-radius:9px}.recommend-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}.recommend-card{padding:18px}.priority{font-size:.54rem;letter-spacing:.8px;border-radius:99px;padding:4px 7px}.priority.high{color:#ffb1c1;background:#ff75911a}.priority.medium{color:#f0d188;background:#f0c86915}.recommend-icon{margin:17px 0 10px}.pink-rec{background:#f26b861e;color:#ff9baf}.blue-rec{background:#ffcd5722;color:#ffdc89}.cyan-rec{background:#e0b34a1e;color:#dfbf73}.recommend-card h3{font-size:.78rem;min-height:38px;margin:0 0 7px}.recommend-card p{font-size:.65rem;color:var(--text-muted);min-height:52px;margin:0}.impact{border-top:1px solid var(--border);padding-top:10px;font-size:.59rem;color:var(--text-dim)}.impact b{display:block;color:#ebe6d9;font-size:.68rem}.recommend-more{margin-top:9px;font-size:.62rem}.terminal-section{padding:3rem 1.5rem;position:relative;z-index:1}.terminal-card{max-width:850px;margin:auto;border:1px solid #dfc0782c;border-radius:16px;overflow:hidden;background:#100d07;box-shadow:0 20px 60px #0000004}.terminal-top{height:40px;display:flex;align-items:center;gap:10px;padding:0 14px;background:#ffffff08;border-bottom:1px solid #ffffff0b}.term-dots{display:flex;gap:4px}.term-dots i{width:7px;height:7px;border-radius:50%;background:#f37790}.term-dots i:nth-child(2){background:#f0c869}.term-dots i:nth-child(3){background:#d8b562}.terminal-top>b{font-size:.58rem;letter-spacing:1px;color:#9ca8b6}.terminal-top>span:last-child{margin-left:auto;font-size:.5rem;color:#e2c277;letter-spacing:.7px}.terminal-body{min-height:125px;padding:18px 20px;font: .72rem/2 monospace;color:#d2cab6}.terminal-body p{margin:0}.terminal-body p i{font-style:normal;color:#d5b770}.terminal-body p span{color:#d9b666}.cursor-blink{animation:blink-cursor .8s steps(2,start) infinite}@keyframes blink-cursor{to{visibility:hidden}}.terminal-foot{padding:8px 20px;border-top:1px solid #ffffff0b;font-size:.59rem;color:#728090}.report-preview{max-width:860px;margin:auto;padding:22px;border:1px solid var(--border);border-radius:20px;background:linear-gradient(140deg,rgba(255,255,255,.04),rgba(255,255,255,.012))}.report-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:15px}.report-head h3{font:700 1rem 'Space Grotesk',sans-serif;margin:10px 0 3px}.report-head p{font-size:.65rem;color:var(--text-dim);margin:0}.report-total strong{font:700 2.2rem 'Space Grotesk',sans-serif;color:#ffb2c1}.report-total small{color:var(--text-dim);font-size:.7rem}.report-modules{display:grid;grid-template-columns:repeat(4,1fr);gap:17px;padding:20px 0}.report-modules>div{display:grid;grid-template-columns:1fr auto;gap:6px;font-size:.66rem;color:var(--text-muted)}.report-modules b{color:#ffdfe5}.report-modules i{grid-column:1/-1;height:5px}.report-lists{display:grid;grid-template-columns:1fr 1fr;gap:14px}.report-lists>div{padding:12px;border-radius:11px;background:#ffffff04;border:1px solid #ffffff0a}.report-lists h4{font-size:.68rem;color:#d9bf83;margin:0 0 6px}.report-lists>div:last-child h4{color:#d6bd83}.report-lists p{font-size:.63rem;color:var(--text-muted);margin:0;line-height:1.7}
+.loading-screen{position:fixed;z-index:2000;inset:0;background:#120f08;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;transition:opacity .45s,visibility .45s}.loading-screen.done{opacity:0;visibility:hidden}.loading-mark{width:50px;height:50px;border:1px solid #ff8da47a;border-radius:16px;display:grid;place-items:center;color:#ffbdca;font-size:1.6rem;animation:mark-pulse 1.1s ease-in-out infinite alternate}.loading-screen>b{font:700 1.2rem 'Space Grotesk',sans-serif}.loading-screen>b span{color:#ff92a8}.loading-screen>small{font-size:.56rem;letter-spacing:1.7px;color:var(--text-dim)}.loading-track{width:155px;height:3px;border-radius:4px;background:#ffffff12;margin-top:12px;overflow:hidden}.loading-track i{display:block;width:100%;height:100%;background:linear-gradient(90deg,#ff7d97,#dab764);transform:scaleX(0);transform-origin:left;animation:load-line .72s ease-out forwards}.loading-ready{font-size:.56rem;color:#d9ba73;letter-spacing:1px;opacity:0;animation:ready-in .25s .68s forwards}@keyframes mark-pulse{to{box-shadow:0 0 26px #ff8da466;transform:scale(1.05)}}@keyframes load-line{to{transform:scaleX(1)}}@keyframes ready-in{to{opacity:1}}.cursor-glow{position:fixed;z-index:0;left:var(--mx,-200px);top:var(--my,-200px);width:300px;height:300px;pointer-events:none;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(255,109,138,.075),transparent 68%);will-change:left,top}.reveal,.reveal-l,.reveal-r,.reveal-scale{filter:blur(4px)}.reveal.visible,.reveal-l.visible,.reveal-r.visible,.reveal-scale.visible{filter:blur(0)}
+.app-modal{display:none;position:fixed;z-index:1500;inset:0;padding:20px;place-items:center;background:rgba(11,9,3,.78);backdrop-filter:blur(12px)}.app-modal.open{display:grid;animation:modal-fade .2s}@keyframes modal-fade{from{opacity:0}to{opacity:1}}.app-modal-card{width:min(100%,600px);max-height:92vh;overflow:auto;padding:22px;border:1px solid #ffffff20;border-radius:20px;background:#221d11;box-shadow:0 30px 100px #0000009;animation:modal-rise .24s ease}@keyframes modal-rise{from{transform:translateY(12px) scale(.98)}to{transform:none}}.modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;border-bottom:1px solid var(--border);padding-bottom:14px;margin-bottom:17px}.modal-head h2{font:700 1.45rem 'Space Grotesk',sans-serif;margin:0 0 5px}.modal-head p:not(.section-eyebrow){font-size:.72rem;color:var(--text-muted);margin:0}.modal-head .section-eyebrow{margin-bottom:5px}.modal-close{width:33px;height:33px;border-radius:9px;border:1px solid var(--border);background:#ffffff08;color:var(--text);font-size:1.25rem;cursor:pointer}.app-modal form label{display:block;font-size:.72rem;font-weight:700;color:#efece4;margin:12px 0}.app-modal form label>span{float:right;font-weight:400;color:var(--text-dim);font-size:.59rem}.app-modal input,.app-modal textarea{width:100%;display:block;margin-top:6px;padding:10px 11px;border:1px solid #ffffff19;border-radius:9px;background:#18140a;color:var(--text);outline:none;font:400 .75rem 'Inter',sans-serif}.app-modal textarea{min-height:86px;resize:vertical}.app-modal input:focus,.app-modal textarea:focus{border-color:#fa8ba1;box-shadow:0 0 0 3px #fa8ba122}.app-modal input::placeholder,.app-modal textarea::placeholder{color:#697285}.app-modal form label>small{display:block;font-weight:400;font-size:.58rem;color:var(--text-dim);margin-top:5px}.eval-submit{width:100%;margin-top:7px}.modal-privacy{font-size:.59rem;text-align:center;color:var(--text-dim);margin:10px 0 0}.eval-error{display:none;background:#ef64801c;border:1px solid #ef64804a;color:#ffacbd;border-radius:8px;padding:9px;font-size:.7rem}.eval-result{display:none}.eval-result.visible{display:block}.result-total{display:flex;align-items:center;gap:13px;padding:13px;border:1px solid var(--border);background:#ffffff05;border-radius:12px}.result-total strong{font:700 1.9rem 'Space Grotesk',sans-serif;color:#ffb5c4}.result-total small{color:var(--text-muted);font-size:.66rem}.result-modules{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.result-module{padding:10px;border:1px solid var(--border);border-radius:10px;font-size:.68rem}.result-module b{float:right;color:#ffb6c5}.result-module small{display:block;color:var(--text-dim);font-size:.59rem;margin-top:3px}.result-tips{padding-left:18px;font-size:.68rem;color:#dfd9cc;line-height:1.7}.result-tips li{padding:3px 0}.result-disclaimer{font-size:.58rem;color:var(--text-dim);line-height:1.6;padding:9px;background:#ffffff05;border-radius:8px}.result-actions{display:flex;gap:9px}.result-actions button{flex:1}.info-content{font-size:.79rem;line-height:1.8;color:var(--text-muted);padding:5px 0 15px}.info-card>.btn-nav{width:100%}.sample-chip{display:inline-block;color:#e1c37d;border-color:#e1c37d30;background:#e1c37d0b}
+html[data-theme="light"]{--bg-deep:#fbf9f4;--bg-card:rgba(255,255,255,.9);--bg-glass:rgba(55,45,20,.045);--border:rgba(62,52,29,.13);--text:#332c1d;--text-muted:#566176;--text-dim:#778197;--purple-light:#ce526b;--purple:#db5973}
+html[data-theme="light"] body{background:radial-gradient(ellipse at 55% 5%,rgba(224,102,126,.09),transparent 40%),var(--bg-deep);color:var(--text)}html[data-theme="light"] .navbar{background:rgba(252,251,247,.84);border-bottom-color:#53462617}html[data-theme="light"] .hero-core,html[data-theme="light"] .hero-float,html[data-theme="light"] .scan-engine,html[data-theme="light"] .app-modal-card{background:rgba(255,255,255,.94);color:#3a3220}html[data-theme="light"] .score-ring:before{background:#ffffff}html[data-theme="light"] .module,html[data-theme="light"] .job-card,html[data-theme="light"] .recommend-card,html[data-theme="light"] .readiness-grid,html[data-theme="light"] .skills-panel,html[data-theme="light"] .gaps-panel,html[data-theme="light"] .report-preview{background:rgba(255,255,255,.75)}html[data-theme="light"] .feat-card h3,html[data-theme="light"] .step h4,html[data-theme="light"] .section-title,html[data-theme="light"] .hero-title .line1{color:#332c1d}html[data-theme="light"] .app-modal input,html[data-theme="light"] .app-modal textarea{background:#fbfaf6;color:#332c1d;border-color:#3a301726}html[data-theme="light"] .cursor-glow{opacity:.45}html[data-theme="light"] .terminal-card{background:#1e1a10}html[data-theme="light"] .loading-screen{background:#fbf9f4;color:#332c1d}
+@media(max-width:1000px){.nav-links a{padding:6px 7px;font-size:.73rem}.nav-brand{font-size:1.1rem}.hero{gap:1rem}.hero-float-two{right:-8px}.jobs-grid,.recommend-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.nav-inner{position:relative}.menu-toggle{display:block}.nav-links{display:none;position:absolute;top:65px;left:0;right:0;padding:12px;border:1px solid var(--border);border-radius:14px;background:rgba(22,18,10,.97);backdrop-filter:blur(18px);box-shadow:0 18px 40px #0000008;align-items:stretch}.nav-links.open{display:flex;flex-direction:column}.nav-links li{display:block!important}.nav-links a{display:block;padding:10px 12px;font-size:.86rem}.nav-links .btn-nav{width:100%}.hero{grid-template-columns:1fr;text-align:center;padding-top:95px;gap:0}.hero>div:first-child{text-align:center}.hero-cta,.hero-badges{justify-content:center}.hero-sub{margin-left:auto;margin-right:auto}.hero-visual{height:390px;max-width:550px;width:100%;margin:0 auto}.hero-orbit{width:320px;height:320px}.hero-core{transform:scale(.9)}.scan-board{grid-template-columns:1fr;gap:14px;padding:23px}.scan-user{display:none}.scan-engine{grid-row:1}.scan-sources{grid-template-columns:repeat(2,1fr)}.scan-result{grid-column:1}.scan-wire{left:15%;right:15%;top:55%}.steps-row::after{display:none}.readiness-grid{grid-template-columns:1fr}.readiness-card{max-width:380px;width:100%;margin:auto}.stats-grid{grid-template-columns:repeat(2,1fr)}.stat-box{border-right:0;border-bottom:1px solid var(--border)}.stat-box:nth-child(2){border-bottom:1px solid var(--border)}.stat-box:last-child{border-bottom:0}.report-modules{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){section{padding-left:1rem;padding-right:1rem}.hero{padding-top:86px}.hero-title{font-size:clamp(2.7rem,12vw,4rem);letter-spacing:-1.5px}.hero-sub{font-size:.96rem}.hero-cta{flex-direction:column;align-items:stretch}.hero-cta a{justify-content:center}.hero-badges{display:flex;gap:6px}.badge-item{font-size:.63rem;padding:6px 9px}.hero-visual{height:350px}.hero-orbit{width:260px;height:260px}.hero-core{transform:scale(.82)}.hero-float{padding:8px;font-size:.65rem}.hero-float-one{top:22px;left:-3px}.hero-float-two{top:43px;right:-4px}.hero-float-three{bottom:25px;left:-5px}.hero-float-four{bottom:42px;right:-5px}.features-grid,.testimonials-grid{grid-template-columns:1fr}.module-preview{display:none}.feat-card.expanded .module-preview{display:grid}.feat-card{cursor:pointer}.steps-row{grid-template-columns:1fr}.stats-grid{grid-template-columns:repeat(2,1fr)}.stat-num{font-size:2.3rem}.stat-box{padding:1.5rem .8rem}.jobs-grid,.recommend-grid,.skills-grid{grid-template-columns:1fr}.job-card>p,.recommend-card p,.recommend-card h3{min-height:0}.readiness-grid{padding:14px}.readiness-details{padding:8px 2px}.scan-result{flex-wrap:wrap;justify-content:center;text-align:center}.report-preview{padding:14px}.report-lists{grid-template-columns:1fr}.app-modal{padding:9px}.app-modal-card{padding:16px;max-height:95vh}.result-modules{grid-template-columns:1fr 1fr}.cursor-glow{display:none}.theme-toggle,.menu-toggle{width:35px;height:35px}.nav-brand{font-size:1rem}}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid #ff9baf;outline-offset:3px}
+@media(prefers-reduced-motion:reduce){.hero-orbit,.hero-core,.hero-float,.hero-core:before,.feat-icon,.core-bars i,.divider-line:after,.loading-mark,.loading-track i,.scan-sweep,.engine-orbit:after,.cursor-blink{animation:none!important}.reveal,.reveal-l,.reveal-r,.reveal-scale{opacity:1;transform:none;filter:none;transition:none}.cursor-glow{display:none}}
+
+
+/* Optional-signal evaluator, private PDF dropzone and evidence dashboard */
+.signal-status{display:block!important;float:none!important;margin:6px 0 0!important;font-size:.61rem!important;color:var(--text-dim)!important;font-weight:500!important;transition:color .22s,transform .22s}.signal-status.provided{color:#e1c37d!important;transform:translateX(2px)}
+.resume-field{margin:13px 0}.resume-field>label{display:block;font-size:.72rem;font-weight:700;color:#efece4;margin:12px 0 7px}.resume-field>label>span{float:right;font-weight:400;color:var(--text-dim);font-size:.59rem}.resume-dropzone input[type=file]{display:none!important}.resume-dropzone{display:flex;gap:13px;align-items:center;min-height:95px;padding:15px;border:1px dashed #ff93a966;border-radius:13px;background:linear-gradient(120deg,#ff7b950b,#ffc94c08);cursor:pointer;transition:.22s}.resume-dropzone:hover,.resume-dropzone.drag-over{border-color:#ff9fb2;background:#ed728b1a;box-shadow:0 0 25px #ff809918}.drop-icon{width:40px;height:40px;flex:0 0 auto;border-radius:12px;display:grid;place-items:center;background:#ff8ca31c;color:#ffbfcc;font-size:1.2rem}.resume-dropzone b,.resume-dropzone small{display:block}.resume-dropzone b{font-size:.72rem;color:#ffe9ed}.resume-dropzone small{font-size:.61rem;color:var(--text-dim);margin-top:3px}.resume-dropzone small span{color:#ffacbd;text-decoration:underline}.resume-file-meta{display:flex;align-items:center;gap:8px;margin-top:8px;padding:8px 10px;border:1px solid #d9b76733;border-radius:9px;background:#d9b7670b}.resume-file-meta[hidden],.upload-progress[hidden],.upload-progress-label[hidden]{display:none}.file-check{color:#dfbe72}.file-name{font-size:.66rem;color:#e8e4dc;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}.resume-file-meta button{border:0;background:none;color:#ffabbc;font-size:.62rem;cursor:pointer}.upload-progress{height:4px;border-radius:9px;background:#ffffff13;overflow:hidden;margin:9px 0 3px}.upload-progress i{height:100%;width:0;display:block;background:linear-gradient(90deg,#f57790,#d9b663);transition:width .14s}.upload-progress-label,.field-note{display:block;font-size:.58rem;color:var(--text-dim);margin:4px 0 0}.text-divider{display:flex;align-items:center;gap:9px;color:var(--text-dim);font-size:.6rem;margin:13px 0 3px}.text-divider:before,.text-divider:after{content:"";height:1px;background:var(--border);flex:1}.eval-submit:disabled{opacity:.72;cursor:wait;transform:none}.analysis-state{text-align:center;padding:25px 12px}.analysis-state[hidden]{display:none}.analysis-spinner{width:66px;height:66px;margin:0 auto 15px;border-radius:50%;border:2px solid #ffffff13;border-top-color:#ff9db1;border-right-color:#d9ba70;display:grid;place-items:center;animation:analysis-spin 1.15s linear infinite;box-shadow:0 0 30px #ff829b19}.analysis-spinner:after{content:"✳";font-size:1.5rem;color:#ffb6c5;animation:analysis-spin 5s linear infinite reverse}@keyframes analysis-spin{to{transform:rotate(360deg)}}.analysis-state h3{font:700 1rem 'Space Grotesk',sans-serif;margin:0 0 4px}.analysis-state>p{font-size:.67rem;color:var(--text-muted);margin:0 0 15px}.analysis-state ul{list-style:none;text-align:left;max-width:370px;margin:0 auto 15px;padding:0}.analysis-state li{font-size:.67rem;color:var(--text-dim);padding:6px 0}.analysis-state li:before{content:"○";display:inline-block;width:20px;color:#606a7e}.analysis-state li.active:before{content:"◌";color:#ffa9ba}.analysis-state li.done{color:#eae3d1}.analysis-state li.done:before{content:"✓";color:#dfbe71}.analysis-meter{height:4px;max-width:370px;margin:0 auto 9px;border-radius:9px;background:#ffffff12;overflow:hidden}.analysis-meter i{display:block;width:5%;height:100%;background:linear-gradient(90deg,#ff849d,#d9b768);transition:width .4s}.analysis-state>small{font-size:.57rem;color:var(--text-dim)}
+.dashboard-hero{display:flex;align-items:center;gap:17px;padding:15px;border:1px solid #ff91a72a;border-radius:14px;background:radial-gradient(ellipse at 0 0,#ef789017,transparent 60%),#ffffff04}.result-gauge{--score:0;width:85px;height:85px;flex:0 0 auto;border-radius:50%;display:grid;place-items:center;background:conic-gradient(#ff98ad calc(var(--score)*1%),#ffffff14 0);position:relative;animation:gauge-appear .7s ease}@keyframes gauge-appear{from{transform:scale(.75);opacity:.4}to{transform:scale(1);opacity:1}}.result-gauge:before{content:"";position:absolute;inset:6px;border-radius:50%;background:#221d11}.result-gauge>div{position:relative;z-index:1}.result-gauge b{font:700 1.55rem 'Space Grotesk',sans-serif}.result-gauge small{font-size:.57rem;color:var(--text-muted)}.report-kicker{font-size:.51rem;letter-spacing:1px;color:#ffafbf}.dashboard-hero h3{font:700 .94rem 'Space Grotesk',sans-serif;margin:4px 0}.dashboard-hero p,.dashboard-hero>div:last-child>small{display:block;color:var(--text-muted);font-size:.62rem;line-height:1.55;margin:0}.result-section{margin-top:17px}.result-section>h3{font:700 .78rem 'Space Grotesk',sans-serif;margin:0 0 9px}.result-muted{font-size:.61rem;color:var(--text-dim);margin:-5px 0 9px}.source-summary{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}.source-chip{display:grid;grid-template-columns:18px 1fr;align-items:center;gap:0 6px;padding:8px;border:1px solid var(--border);border-radius:9px;background:#ffffff03}.source-chip>span{grid-row:span 2;color:#747e91}.source-chip>b{font-size:.63rem}.source-chip>small{font-size:.55rem;color:var(--text-dim)}.source-chip.source-ok{border-color:#d9b76728}.source-chip.source-ok>span{color:#dfbf74}.source-chip.source-warn{border-color:#e9c26733}.source-chip.source-warn>span{color:#e9c675}.dashboard-modules{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.dashboard-module{padding:10px;border:1px solid var(--border);border-radius:10px;background:#ffffff03}.dashboard-module header{display:flex;justify-content:space-between;align-items:center}.dashboard-module header>b{font-size:.68rem}.dashboard-module header>strong{font:700 .85rem 'Space Grotesk',sans-serif;color:#ffb6c5}.dashboard-module header>strong small{font:500 .55rem 'Inter',sans-serif;color:var(--text-dim)}.dashboard-module>p{font-size:.58rem;color:#ccc5b4;margin:4px 0}.module-scope{font-size:.54rem;line-height:1.5;color:var(--text-dim)}.evidence-skills{display:flex;flex-wrap:wrap;gap:7px}.evidence-skill,.gap-skill{padding:7px 9px;border:1px solid #e7778d2c;border-radius:9px;background:#fb839b0b;min-width:95px}.evidence-skill>b,.evidence-skill>small,.gap-skill>small{display:block}.evidence-skill>b,.gap-skill{font-size:.61rem;color:#ffd8e0}.evidence-skill>small,.gap-skill>small{font-size:.51rem;color:var(--text-dim);margin-top:3px}.gap-skill{border-color:#e2c07130;background:#e2c07109;color:#f0dba9}.cross-signal{margin-top:10px;padding:10px;border:1px solid #d2b16325;border-radius:10px;background:#d2b16308}.cross-signal>b{font-size:.63rem}.cross-signal>p,.cross-signal>small{display:block;font-size:.56rem;color:var(--text-muted);margin:5px 0}.cross-signal>span{display:inline-block;margin:2px 4px 2px 0;padding:3px 7px;border-radius:99px;background:#d7b46217;color:#e4ca8d;font-size:.54rem}.project-list{display:grid;gap:8px}.project-evidence{padding:10px;border:1px solid var(--border);border-radius:10px;background:#ffffff03}.project-evidence header{display:flex;justify-content:space-between;gap:8px}.project-evidence header>b{font-size:.66rem}.project-evidence header>span{font-size:.56rem;color:#ffb3c2}.project-evidence>p{font-size:.57rem;color:var(--text-muted);margin:4px 0 8px}.project-facts{display:flex;flex-wrap:wrap;gap:5px}.project-facts span{font-size:.52rem;color:var(--text-dim);padding:3px 6px;border-radius:6px;background:#ffffff06}.project-meter,.readiness-result>i{display:block;height:4px;border-radius:6px;background:#ffffff10;overflow:hidden;margin-top:7px}.project-meter i,.readiness-result>i em{display:block;height:100%;background:linear-gradient(90deg,#ff8ba2,#d8b461);border-radius:inherit;transition:width .85s}.readiness-list{display:grid;gap:9px}.readiness-result>div{display:flex;justify-content:space-between;font-size:.59rem}.readiness-result>div strong{color:#ffb7c5}.readiness-result>small{display:block;font-size:.52rem;color:var(--text-dim);margin-top:3px}.result-tips{padding-left:17px;font-size:.62rem;line-height:1.65}.result-tips li{padding:5px 0}.result-tips li small{display:block;color:var(--text-dim);font-size:.53rem}.result-warning{padding:8px;margin-bottom:7px;border:1px solid #e7bf6333;border-radius:8px;background:#e7bf630c;color:#edd08e;font-size:.61rem;line-height:1.5}.result-disclaimer{font-size:.56rem;line-height:1.6}.result-actions{margin-top:11px}
+
+
+/* Rich palette: oxblood · rose · antique gold */
+:root{--bg-deep:#130b10;--bg-card:rgba(37,20,29,.91);--bg-glass:rgba(255,246,237,.04);--border:rgba(237,215,191,.12);--border-glow:rgba(212,169,91,.5);--purple:#91384f;--purple-light:#e6a0aa;--blue:#c6a15c;--cyan:#e0bd75;--pink:#c86479;--gold:#d6b56b;--green:#9bb68e;--text:#f5eee7;--text-muted:#c9bab6;--text-dim:#93817f;--grad-1:linear-gradient(135deg,#91384f,#d2a65a);--grad-2:linear-gradient(135deg,#c86479,#aa5366);--grad-3:linear-gradient(135deg,#d2a65a,#c86479);--grad-hero:linear-gradient(135deg,#130b10,#301720,#21121a)}
+body{background:radial-gradient(ellipse at 55% 4%,rgba(145,56,79,.17),transparent 38%),var(--bg-deep)}
+.navbar{background:rgba(19,11,16,.78)}
+.hero-core{background:linear-gradient(145deg,rgba(49,29,39,.95),rgba(26,17,23,.96))}
+.scan-engine{background:rgba(31,20,28,.94)}
+.score-ring:before,.readiness-gauge:before{background:#1a1118}
+html[data-theme="light"]{--bg-deep:#f6f0e8;--bg-card:rgba(255,252,247,.94);--bg-glass:rgba(55,31,37,.045);--border:rgba(78,44,48,.15);--text:#38252b;--text-muted:#68565a;--text-dim:#887779;--purple:#8d354d;--purple-light:#87384c;--blue:#947033;--cyan:#a8823e;--pink:#ad5264;--gold:#997333;--green:#647d59;--grad-1:linear-gradient(135deg,#8d354d,#ba8b40);--grad-2:linear-gradient(135deg,#ad5264,#8d354d);--grad-3:linear-gradient(135deg,#ba8b40,#ad5264)}
+html[data-theme="light"] body{background:radial-gradient(ellipse at 55% 5%,rgba(173,82,100,.09),transparent 40%),var(--bg-deep)}
+html[data-theme="light"] .navbar{background:rgba(250,246,239,.88)}
+.theme-toggle{width:auto;min-width:116px;height:40px;display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:0 14px;border-radius:999px;border-color:rgba(212,169,91,.36);background:linear-gradient(135deg,rgba(145,56,79,.17),rgba(212,169,91,.14));color:var(--text);font-size:.72rem;font-weight:700;letter-spacing:.2px;white-space:nowrap}
+.theme-toggle i{color:var(--gold);font-size:.86rem}.theme-toggle:hover{border-color:var(--gold);box-shadow:0 0 20px rgba(212,169,91,.18)}
+html[data-theme="light"] .theme-toggle{background:linear-gradient(135deg,rgba(141,53,77,.09),rgba(186,139,64,.11));color:var(--text)}
+@media(max-width:480px){.theme-toggle{min-width:40px;width:40px;padding:0}.theme-toggle span{display:none}}
+
+/* Readability pass: larger base scale, minimum small-copy size, and high-contrast light mode. */
+html{font-size:18px}
+body{font-size:1rem;line-height:1.68}
+.btn-nav,
+.hero-pill,
+.badge-item,
+.section-eyebrow,
+.feat-tag,
+.step p,
+.stat-label,
+.sample-footnote,
+.avatar,
+.author-info .role,
+.stars,
+.tech-tag,
+/* ── FOOTER ── */
+footer,
+.nav-links a,
+.hero-core>small,
+.sample-chip,
+.demo-label,
+.hero-float b,
+.hero-float small,
+.hero-float>strong small,
+.preview-score>span:last-child b,
+.preview-score>span:last-child small,
+.mini-metric,
+.feature-more,
+.job-detail,
+.recommend-more,
+.scan-user b,
+.scan-engine>b,
+.scan-user small,
+.scan-engine small,
+.scan-button,
+.scan-source,
+.scan-result b,
+.scan-result small,
+.readiness-gauge small,
+.readiness-card p,
+.readiness-metric,
+.readiness-metric strong,
+.readiness-note,
+.job-card>p,
+.job-skills span,
+.gap-tags span,
+.skill-row,
+.skill-row strong,
+.gaps-panel p,
+.gap-tip,
+.priority,
+.recommend-card h3,
+.recommend-card p,
+.impact,
+.impact b,
+.terminal-top>b,
+.terminal-top>span:last-child,
+.terminal-foot,
+.report-head p,
+.report-total small,
+.report-modules>div,
+.report-lists h4,
+.report-lists p,
+.loading-screen>small,
+.loading-ready,
+.modal-head p:not(.section-eyebrow),
+.app-modal form label,
+.app-modal form label>span,
+.app-modal form label>small,
+.modal-privacy,
+.eval-error,
+.result-total small,
+.result-module,
+.result-module small,
+.result-tips,
+.result-disclaimer,
+.info-content,
+.hero-float,
+/* Optional-signal evaluator,
+private PDF dropzone and evidence dashboard */
+.signal-status,
+.resume-field>label,
+.resume-field>label>span,
+.resume-dropzone b,
+.resume-dropzone small,
+.file-name,
+.resume-file-meta button,
+.upload-progress-label,
+.field-note,
+.text-divider,
+.analysis-state>p,
+.analysis-state li,
+.analysis-state>small,
+.result-gauge small,
+.report-kicker,
+.dashboard-hero p,
+.dashboard-hero>div:last-child>small,
+.result-muted,
+.source-chip>b,
+.source-chip>small,
+.dashboard-module header>b,
+.dashboard-module>p,
+.module-scope,
+.evidence-skill>b,
+.gap-skill,
+.evidence-skill>small,
+.gap-skill>small,
+.cross-signal>b,
+.cross-signal>p,
+.cross-signal>small,
+.cross-signal>span,
+.project-evidence header>b,
+.project-evidence header>span,
+.project-evidence>p,
+.project-facts span,
+.readiness-result>div,
+.readiness-result>small,
+.result-tips li small,
+.result-warning,
+.theme-toggle{font-size:max(14px,.82rem)!important}
+.result-gauge.no-score{background:var(--border);color:var(--text)}.result-gauge.no-score:before{background:var(--bg-card)}.result-gauge.no-score b{font-size:1.3rem}
+.linkedin-summary-field textarea{width:100%;min-height:105px;resize:vertical;padding:12px 13px;border-radius:10px;border:1px solid var(--border);background:var(--bg-glass);color:var(--text);font:inherit;line-height:1.55;outline:none}.linkedin-summary-field textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px color-mix(in srgb,var(--gold) 18%,transparent)}
+html[data-theme="light"]{--bg-deep:#f6f0e8;--bg-card:#fffdf9;--bg-glass:rgba(54,29,35,.055);--border:rgba(67,39,44,.22);--text:#24151b;--text-muted:#4f3a41;--text-dim:#5b464c;color-scheme:light}
+html[data-theme="light"] body{color:#24151b}
+html[data-theme="light"] .section-sub,html[data-theme="light"] .feat-card p,html[data-theme="light"] .readiness-card p,html[data-theme="light"] .job-card>p,html[data-theme="light"] .gaps-panel p,html[data-theme="light"] .recommend-card p,html[data-theme="light"] .report-head p,html[data-theme="light"] .report-lists p,html[data-theme="light"] .terminal-foot,html[data-theme="light"] .dashboard-hero p,html[data-theme="light"] .dashboard-hero small,html[data-theme="light"] .result-muted,html[data-theme="light"] .module-scope,html[data-theme="light"] .dashboard-module>p,html[data-theme="light"] .source-chip>small,html[data-theme="light"] .evidence-skill>small,html[data-theme="light"] .gap-skill>small,html[data-theme="light"] .cross-signal>p,html[data-theme="light"] .cross-signal>small,html[data-theme="light"] .project-evidence>p,html[data-theme="light"] .project-facts span,html[data-theme="light"] .readiness-result>small,html[data-theme="light"] .result-tips li small,html[data-theme="light"] .result-disclaimer,html[data-theme="light"] .field-note,html[data-theme="light"] .modal-privacy,html[data-theme="light"] .analysis-state li,html[data-theme="light"] .analysis-state>small,html[data-theme="light"] .resume-dropzone small,html[data-theme="light"] .signal-status{color:#514047!important}
+html[data-theme="light"] .app-modal-card,html[data-theme="light"] .dashboard-module,html[data-theme="light"] .source-chip,html[data-theme="light"] .project-evidence,html[data-theme="light"] .report-preview,html[data-theme="light"] .skills-panel,html[data-theme="light"] .gaps-panel{background-color:#fffdf9;border-color:#d8c8c4}
+html[data-theme="light"] .result-warning{color:#5a410c;background:#f8e9c7;border-color:#cfab54}
+html[data-theme="light"] .result-gauge:before{background:#fffdf9}
+
+/* Light theme form contrast: dark, readable labels and fields on warm-white cards. */
+html[data-theme="light"] .app-modal-card{color:#26171d;background:#fffdf9;border-color:#d6c4bf}
+html[data-theme="light"] .app-modal-card h2,html[data-theme="light"] .app-modal-card h3,html[data-theme="light"] .app-modal-card label,html[data-theme="light"] .app-modal-card .section-eyebrow,html[data-theme="light"] .app-modal-card .info-content{color:#2c1e23!important}
+html[data-theme="light"] .app-modal-card p,html[data-theme="light"] .app-modal-card small,html[data-theme="light"] .app-modal-card .modal-head p:not(.section-eyebrow),html[data-theme="light"] .app-modal-card .modal-privacy,html[data-theme="light"] .app-modal-card .field-note,html[data-theme="light"] .app-modal-card .resume-dropzone small,html[data-theme="light"] .app-modal-card .signal-status{color:#514047!important}
+html[data-theme="light"] .app-modal-card label>span{color:#665158!important}
+html[data-theme="light"] .app-modal-card input,html[data-theme="light"] .app-modal-card textarea{color:#26171d!important;background:#fff!important;border-color:#b9a5a1!important}
+html[data-theme="light"] .app-modal-card input::placeholder,html[data-theme="light"] .app-modal-card textarea::placeholder{color:#75666a!important;opacity:1}
+html[data-theme="light"] .nav-links a{color:#302128!important}
+html[data-theme="light"] .nav-links a.active{color:#7a213a!important}
+
+html[data-theme="light"] .hero-float{background:#fffdf9!important;border-color:#d8c9c4!important;color:#2d1e24!important}
+html[data-theme="light"] .hero-float b,html[data-theme="light"] .hero-float small,html[data-theme="light"] .hero-float>strong{color:#38262d!important}
+html[data-theme="light"] .hero-core{background:linear-gradient(145deg,#fffdf9,#f3e9e3)!important;border-color:#d8c9c4!important;color:#2c1e23!important}
+html[data-theme="light"] .hero-core>small{color:#514047!important}
+html[data-theme="light"] .hero-core .sample-chip{background:#f2e4df;color:#602239;border-color:#d9c2ba}
+html[data-theme="light"] .badge-item{color:#48343a!important;background:#fffdf9!important;border-color:#d7c9c5!important}
+</style>
+</head>
+<body>
+
+<!-- Aurora Background -->
+<div class="aurora" aria-hidden="true">
+  <div class="aurora-blob"></div>
+  <div class="aurora-blob"></div>
+  <div class="aurora-blob"></div>
+</div>
+
+<!-- Canvas for particle network -->
+<canvas id="bgCanvas" aria-hidden="true"></canvas>
+
+<!-- ── NAVBAR ── -->
+<header class="navbar" role="banner">
+  <nav class="nav-inner" aria-label="Main navigation">
+    <a class="nav-brand" href="#hero">Portfolio.AI</a>
+    <ul class="nav-links" role="list">
+      <li><a href="#hero" class="active">Home</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#analysis">Analysis</a></li>
+      <li><a href="#jobs">Job Match</a></li>
+      <li><a href="#stats">Stats</a></li>
+      <li><a href="#testimonials">Reviews</a></li>
+      <li><button class="btn-nav evaluate-open">Evaluate Now <span aria-hidden="true">↗</span></button></li>
+    </ul>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to light mode" aria-pressed="false" title="Switch color theme"><i id="themeIcon" class="fas fa-sun" aria-hidden="true"></i><span id="themeLabel">Light mode</span></button>
+    <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open navigation menu" aria-expanded="false">☰</button>
+  </nav>
+</header>
+
+<!-- ── HERO ── -->
+<section class="hero" id="hero" aria-labelledby="hero-heading">
+  <div>
+    <div class="hero-pill">
+      <span class="pill-dot"></span>
+      Transparent Career Review &nbsp;·&nbsp; 4 Modules
+    </div>
+    <h1 class="hero-title" id="hero-heading">
+      <span class="line1">Evaluate Your</span><br>
+      <span class="grad-text" id="typeTarget">Portfolio Signals</span>
+    </h1>
+    <p class="hero-sub">Submit any one or more signals for a transparent review.<br>Only accessible evidence is scored; unsupported sources are clearly labeled.</p>
+    <div class="hero-cta">
+      <a href="#features" class="btn-primary">
+        <i class="fas fa-rocket" aria-hidden="true"></i> Get Started
+      </a>
+      <a href="#how" class="btn-ghost">
+        <i class="fas fa-play" aria-hidden="true"></i> How it works
+      </a>
+    </div>
+    <div class="hero-badges">
+      <span class="badge-item"><i class="fab fa-github" style="color:#f65c7b"></i> GitHub Analysis</span>
+      <span class="badge-item"><i class="fas fa-file-pdf" style="color:#ec4869"></i> Resume Review</span>
+      <span class="badge-item"><i class="fab fa-linkedin" style="color:#f6be3b"></i> LinkedIn Tips</span>
+      <span class="badge-item"><i class="fas fa-globe" style="color:#d49606"></i> Portfolio Check</span>
+    </div>
+  </div>
+  <div class="hero-visual" aria-label="Illustrative portfolio analysis preview">
+    <div class="hero-orbit" aria-hidden="true"></div>
+    <div class="hero-float hero-float-one"><span class="float-icon">⌘</span><span><b>GitHub Score</b><small>Illustrative preview</small></span><strong>87<small>/100</small></strong></div>
+    <div class="hero-float hero-float-two"><span class="float-icon pink">▤</span><span><b>Resume Score</b><small>Illustrative preview</small></span><strong>92<small>/100</small></strong></div>
+    <div class="hero-float hero-float-three"><span class="float-icon cyan">✦</span><span><b>Profile strength</b><small>Sample snapshot</small></span><strong>84%</strong></div>
+    <div class="hero-float hero-float-four"><span class="float-icon blue">↗</span><span><b>Role ideas</b><small>Sample only</small></span><strong>3</strong></div>
+    <div class="hero-core"><div class="core-rings"><span>✳</span></div><b>PORTFOLIO REVIEW ENGINE</b><small>Four signals. One clearer next step.</small><div class="core-bars"><i></i><i></i><i></i><i></i></div><span class="sample-chip">DEMO PREVIEW · NOT AN EVALUATION</span></div>
+  </div>
+</section>
+
+<div class="divider-line"></div>
+<section id="analysis" class="scan-section" aria-labelledby="scan-heading">
+ <div class="section-wrap">
+  <div class="scan-heading reveal"><p class="section-eyebrow">Career intelligence</p><h2 class="section-title" id="scan-heading">One engine. A more complete picture.</h2><p class="section-sub">See how the review connects your professional signals. This animated preview is illustrative; run a real review to get results from your inputs.</p></div>
+  <div class="scan-board reveal" id="scanBoard">
+   <div class="scan-user"><span class="scan-node-icon">◎</span><b>YOUR PROFILE</b><small>What you share</small></div>
+   <div class="scan-wire wire-a"></div><div class="scan-engine"><div class="engine-orbit"><span>✳</span></div><b>PORTFOLIO REVIEW ENGINE</b><small class="scan-status" id="scanStatus">Ready when you are</small><div class="scan-progress"><i id="scanProgress"></i></div><button class="scan-button" id="scanButton" type="button">▶ &nbsp;Start demo animation</button></div>
+   <div class="scan-sources"><div class="scan-source" data-source="github"><span>⌘</span> GitHub <i>↗</i></div><div class="scan-source" data-source="resume"><span>▤</span> Resume <i>↗</i></div><div class="scan-source" data-source="linkedin"><span>in</span> LinkedIn <i>↗</i></div><div class="scan-source" data-source="portfolio"><span>◎</span> Portfolio <i>↗</i></div></div>
+   <div class="scan-result" id="scanResult"><span>✓</span><b>Demo animation complete</b><small>Open “Evaluate Now” for a review of your actual inputs.</small></div>
+   <div class="scan-sweep" aria-hidden="true"></div>
+  </div>
+ </div>
+</section>
+<div class="divider-line"></div>
+
+<!-- ── FEATURES ── -->
+<section id="features" aria-labelledby="feat-heading">
+  <div class="section-wrap" style="text-align:center">
+    <p class="section-eyebrow reveal"><i class="fas fa-sparkles" aria-hidden="true"></i> Features</p>
+    <h2 class="section-title reveal" id="feat-heading">Four Evaluation Modules</h2>
+    <p class="section-sub reveal">One tool that covers every aspect of your developer presence — from code to career profile.</p>
+    <div class="features-grid" role="list">
+      <article class="feat-card reveal" role="listitem">
+        <div class="feat-icon ic-purple"><i class="fab fa-github" aria-hidden="true"></i></div>
+        <h3>GitHub Profile</h3>
+        <p>Checks public profile details and repository descriptions, stars, and topics using GitHub's public API.</p>
+        <span class="feat-tag">Live profile signals</span>
+        <div class="module-preview"><div class="preview-score"><span class="score-ring" data-score="87"><b>0</b></span><span><b>Sample score</b><small>Illustrative only</small></span></div><div class="mini-metric"><span>Repository quality</span><i><b data-width="82"></b></i></div><div class="mini-metric"><span>Profile details</span><i><b data-width="74"></b></i></div><button class="feature-more" type="button" data-module="github">Explore GitHub review <span>↗</span></button></div>
+      </article>
+      <article class="feat-card reveal" role="listitem" style="transition-delay:.1s">
+        <div class="feat-icon ic-pink"><i class="fas fa-file-pdf" aria-hidden="true"></i></div>
+        <h3>Resume Review</h3>
+        <p>Paste resume text or upload a text-based PDF up to 5 MB for a local checklist of common sections, skills, and impact signals. Image-only PDFs may not extract.</p>
+        <span class="feat-tag" style="background:rgba(236,72,105,.12);color:#f4728c;border-color:rgba(236,72,105,.2)">Resume structure</span>
+        <div class="module-preview"><div class="preview-score"><span class="score-ring pink-ring" data-score="92"><b>0</b></span><span><b>Sample score</b><small>Illustrative only</small></span></div><div class="mini-metric"><span>Role keywords</span><i><b data-width="76"></b></i></div><div class="mini-metric"><span>Achievement signals</span><i><b data-width="66"></b></i></div><button class="feature-more" type="button" data-module="resume">Explore resume review <span>↗</span></button></div>
+      </article>
+      <article class="feat-card reveal" role="listitem" style="transition-delay:.2s">
+        <div class="feat-icon ic-blue"><i class="fab fa-linkedin" aria-hidden="true"></i></div>
+        <h3>LinkedIn Profile</h3>
+        <p>Validates the profile link. Paste your headline, About, and experience text for an actual review; the LinkedIn page itself is not scraped.</p>
+        <span class="feat-tag" style="background:rgba(246,190,59,.12);color:#facc60;border-color:rgba(246,190,59,.2)">Profile signals</span>
+        <div class="module-preview"><div class="preview-score"><span class="score-ring blue-ring" data-score="81"><b>0</b></span><span><b>Sample score</b><small>Illustrative only</small></span></div><div class="mini-metric"><span>Headline clarity</span><i><b data-width="79"></b></i></div><div class="mini-metric"><span>Profile story</span><i><b data-width="71"></b></i></div><button class="feature-more" type="button" data-module="linkedin">Explore LinkedIn review <span>↗</span></button></div>
+      </article>
+      <article class="feat-card reveal" role="listitem" style="transition-delay:.3s">
+        <div class="feat-icon ic-cyan"><i class="fas fa-globe" aria-hidden="true"></i></div>
+        <h3>Portfolio Website</h3>
+        <p>Reviews public HTML signals such as title, headings, text volume, contact/project cues, HTTPS, and mobile viewport. It does not render JavaScript or judge visual design.</p>
+        <span class="feat-tag" style="background:rgba(212,150,6,.12);color:#eeb122;border-color:rgba(212,150,6,.2)">Portfolio presence</span>
+        <div class="module-preview"><div class="preview-score"><span class="score-ring cyan-ring" data-score="89"><b>0</b></span><span><b>Sample score</b><small>Illustrative only</small></span></div><div class="mini-metric"><span>Project storytelling</span><i><b data-width="84"></b></i></div><div class="mini-metric"><span>Contact clarity</span><i><b data-width="78"></b></i></div><button class="feature-more" type="button" data-module="portfolio">Explore site review <span>↗</span></button></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<div class="divider-line"></div>
+
+<!-- ── HOW IT WORKS ── -->
+<section id="how" aria-labelledby="how-heading">
+  <div class="section-wrap" style="text-align:center">
+    <p class="section-eyebrow reveal">Process</p>
+    <h2 class="section-title reveal" id="how-heading">Three Simple Steps</h2>
+    <p class="section-sub reveal">From zero to a full career readiness report in under 2 minutes.</p>
+    <div class="steps-row" role="list">
+      <div class="step reveal-l" role="listitem">
+        <div class="step-circle"><span class="step-num">1</span></div>
+        <h4>Add Your Links</h4>
+        <p>Add a GitHub username, LinkedIn or portfolio URL, paste resume text, or upload a text-based PDF. Any one signal works; scanned PDFs may not extract.</p>
+      </div>
+      <div class="step reveal" role="listitem" style="transition-delay:.15s">
+        <div class="step-circle" style="--grad-1:linear-gradient(135deg,#ec4869,#f65c7b)"><span class="step-num" style="background:linear-gradient(135deg,#f4728c,#fa8ba1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">2</span></div>
+        <h4>Review your signals</h4>
+        <p>The backend reads public GitHub signals, checks resume/PDF text, analyzes pasted LinkedIn text, and reviews bounded public portfolio HTML. LinkedIn URLs alone are format-checked.</p>
+      </div>
+      <div class="step reveal-r" role="listitem">
+        <div class="step-circle" style="--grad-1:linear-gradient(135deg,#d49606,#f6be3b)"><span class="step-num" style="background:linear-gradient(135deg,#eeb122,#facc60);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">3</span></div>
+        <h4>Get Your Report</h4>
+        <p>Get module scores and practical suggestions. Job-match cards elsewhere on this page are examples, not calculated results.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-line"></div>
+
+<!-- ── STATS ── -->
+<section class="stats-bg" id="stats" aria-labelledby="stats-heading" style="padding:0">
+  <div class="section-wrap">
+    <p class="sample-footnote">Illustrative concept metrics — not production usage statistics.</p>
+    <div class="stats-grid">
+      <div class="stat-box reveal">
+        <span class="stat-num" data-target="500" data-suffix="+">0</span>
+        <span class="stat-label">Portfolios Evaluated</span>
+      </div>
+      <div class="stat-box reveal" style="transition-delay:.1s">
+        <span class="stat-num" data-target="100" data-suffix="+">0</span>
+        <span class="stat-label">Job Roles Suggested</span>
+      </div>
+      <div class="stat-box reveal" style="transition-delay:.2s">
+        <span class="stat-num" data-target="85" data-suffix="%">0</span>
+        <span class="stat-label">% Users Improved</span>
+      </div>
+      <div class="stat-box reveal" style="transition-delay:.3s">
+        <span class="stat-num" data-target="4" data-suffix="">0</span>
+        <span class="stat-label">Evaluation Modules</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-line"></div>
+
+<!-- ── TESTIMONIALS ── -->
+<section id="testimonials" aria-labelledby="testi-heading">
+  <div class="section-wrap" style="text-align:center">
+    <p class="section-eyebrow reveal">Testimonials</p>
+    <h2 class="section-title reveal" id="testi-heading">What Users Say</h2>
+    <p class="sample-footnote">Sample testimonials shown for the concept preview.</p>
+    <div class="testimonials-grid">
+      <article class="testi-card reveal-l">
+        <div class="stars">★★★★★</div>
+        <div class="quote-icon">"</div>
+        <p>This tool helped me polish my GitHub and land an internship! The resume feedback feature was helpful.</p>
+        <div class="testi-author">
+          <div class="avatar av1">SR</div>
+          <div class="author-info">
+            <div class="name">Sneha R.</div>
+            <div class="role">Final Year CSE Student</div>
+          </div>
+        </div>
+      </article>
+      <article class="testi-card reveal" style="transition-delay:.1s">
+        <div class="stars">★★★★★</div>
+        <div class="quote-icon">"</div>
+        <p>The LinkedIn tips were spot on. I updated my profile and started getting recruiter messages within days.</p>
+        <div class="testi-author">
+          <div class="avatar av2">AK</div>
+          <div class="author-info">
+            <div class="name">Arjun K.</div>
+            <div class="role">Software Developer</div>
+          </div>
+        </div>
+      </article>
+      <article class="testi-card reveal-r">
+        <div class="stars">★★★★★</div>
+        <div class="quote-icon">"</div>
+        <p>Portfolio checker found 5 missing sections I hadn't noticed. Scored 40 points higher after fixing!</p>
+        <div class="testi-author">
+          <div class="avatar av3">PM</div>
+          <div class="author-info">
+            <div class="name">Pooja M.</div>
+            <div class="role">Frontend Developer</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<div class="divider-line"></div>
+
+<!-- ── TECH STACK ── -->
+<section aria-labelledby="tech-heading">
+  <div class="section-wrap" style="text-align:center">
+    <p class="section-eyebrow reveal">Stack</p>
+    <h2 class="section-title reveal" id="tech-heading">Technologies Used</h2>
+    <div class="tags-wrap reveal" role="list">
+      <span class="tech-tag tag-purple" role="listitem">Python</span>
+      <span class="tech-tag tag-blue" role="listitem">Flask</span>
+      <span class="tech-tag tag-cyan" role="listitem">CSS Grid</span>
+      <span class="tech-tag tag-pink" role="listitem">Flexbox</span>
+      <span class="tech-tag tag-gold" role="listitem">CSS Animations</span>
+      <span class="tech-tag tag-green" role="listitem">Intersection Observer</span>
+      <span class="tech-tag tag-purple" role="listitem">Dark Mode</span>
+      <span class="tech-tag tag-blue" role="listitem">Semantic HTML</span>
+      <span class="tech-tag tag-cyan" role="listitem">ARIA</span>
+      <span class="tech-tag tag-pink" role="listitem">Glassmorphism</span>
+      <span class="tech-tag tag-gold" role="listitem">Canvas API</span>
+      <span class="tech-tag tag-green" role="listitem">GitHub API</span>
+      <span class="tech-tag tag-purple" role="listitem">Resume Heuristics</span>
+      <span class="tech-tag tag-blue" role="listitem">requestAnimationFrame</span>
+    </div>
+  </div>
+</section>
+
+
+<div class="divider-line"></div>
+<section class="career-section" id="readiness" aria-labelledby="readiness-heading"><div class="section-wrap">
+ <div class="section-head reveal"><p class="section-eyebrow">Career readiness</p><h2 class="section-title" id="readiness-heading">A dashboard concept, clearly labeled.</h2><p class="section-sub">This sample dashboard uses illustrative numbers, not your personal assessment. Actual results appear after you run the evaluator.</p></div>
+ <div class="readiness-grid reveal"><div class="readiness-card"><span class="demo-label">SAMPLE DATA · NOT YOUR RESULT</span><div class="readiness-gauge" data-score="87"><div><b>0</b><small>CAREER READINESS</small></div></div><h3>Strong foundation, room to grow</h3><p>Use specific feedback to decide what to improve next.</p></div><div class="readiness-details"><div class="readiness-metric"><span>Technical signals</span><i><b data-width="91"></b></i><strong>91%</strong></div><div class="readiness-metric"><span>Professional profile</span><i><b data-width="84"></b></i><strong>84%</strong></div><div class="readiness-metric"><span>Resume strength</span><i><b data-width="90"></b></i><strong>90%</strong></div><div class="readiness-metric"><span>Portfolio quality</span><i><b data-width="82"></b></i><strong>82%</strong></div><div class="readiness-note">These demo indicators explain the interface; they are not generated from your profile.</div></div></div>
+</div></section>
+<div class="divider-line"></div>
+<section class="jobs-section" id="jobs" aria-labelledby="jobs-heading"><div class="section-wrap">
+ <div class="section-head reveal"><p class="section-eyebrow">AI job matching · demo</p><h2 class="section-title" id="jobs-heading">Explore possible next roles.</h2><p class="section-sub">Illustrative matches only. The current backend does not infer jobs from your profile.</p></div>
+ <div class="jobs-grid"><article class="job-card reveal"><div class="job-top"><span class="job-icon">⌘</span><span class="match-pill">92% <small>sample match</small></span></div><h3>Python Developer</h3><p>Build backend services, APIs, and data-driven tools.</p><div class="job-skills"><span>Python</span><span>REST APIs</span><span>SQL</span></div><div class="job-bar"><i data-width="92"></i></div><button class="job-detail" data-job="Python Developer" type="button">View demo analysis ↗</button></article>
+ <article class="job-card reveal"><div class="job-top"><span class="job-icon blue-job">⌘</span><span class="match-pill">88% <small>sample match</small></span></div><h3>Full Stack Developer</h3><p>Shape polished experiences across the application stack.</p><div class="job-skills"><span>JavaScript</span><span>React</span><span>Node</span></div><div class="job-bar"><i data-width="88"></i></div><button class="job-detail" data-job="Full Stack Developer" type="button">View demo analysis ↗</button></article>
+ <article class="job-card reveal"><div class="job-top"><span class="job-icon mint-job">▥</span><span class="match-pill">81% <small>sample match</small></span></div><h3>Data Analyst</h3><p>Turn information into useful product and business insight.</p><div class="job-skills"><span>SQL</span><span>Python</span><span>Dashboards</span></div><div class="job-bar"><i data-width="81"></i></div><button class="job-detail" data-job="Data Analyst" type="button">View demo analysis ↗</button></article>
+ <article class="job-card reveal"><div class="job-top"><span class="job-icon pink-job">✧</span><span class="match-pill">76% <small>sample match</small></span></div><h3>AI / ML Intern</h3><p>Prototype intelligent features and evaluate model behavior.</p><div class="job-skills"><span>Python</span><span>Data</span><span>ML basics</span></div><div class="job-bar"><i data-width="76"></i></div><button class="job-detail" data-job="AI / ML Intern" type="button">View demo analysis ↗</button></article></div>
+</div></section>
+<div class="divider-line"></div>
+<section class="skills-section" id="skills" aria-labelledby="skills-heading"><div class="section-wrap">
+ <div class="section-head reveal"><p class="section-eyebrow">Skill map · illustrative</p><h2 class="section-title" id="skills-heading">See strengths and possible gaps.</h2><p class="section-sub">Example visualization only—no skill proficiency is inferred until a future backend integration supports it.</p></div>
+ <div class="skills-grid reveal"><div class="skills-panel"><h3>Your skills <span>DEMO</span></h3><div class="skill-row"><span>Python</span><i><b data-width="90"></b></i><strong>90%</strong></div><div class="skill-row"><span>JavaScript</span><i><b data-width="72"></b></i><strong>72%</strong></div><div class="skill-row"><span>React</span><i><b data-width="61"></b></i><strong>61%</strong></div><div class="skill-row"><span>SQL</span><i><b data-width="80"></b></i><strong>80%</strong></div><div class="skill-row"><span>Git</span><i><b data-width="88"></b></i><strong>88%</strong></div></div><div class="gaps-panel"><h3>Skills to explore <span>EXAMPLE</span></h3><p>These example skill gaps are not generated from your data.</p><div class="gap-tags"><span>React</span><span>TypeScript</span><span>Docker</span><span>AWS</span></div><div class="gap-tip">↗ Add project evidence to your profile to make relevant skills easier to spot.</div></div></div>
+</div></section>
+<div class="divider-line"></div>
+<section class="recommend-section" id="recommendations" aria-labelledby="recommend-heading"><div class="section-wrap">
+ <div class="section-head reveal"><p class="section-eyebrow">Next best actions · examples</p><h2 class="section-title" id="recommend-heading">Your personalized improvement plan.</h2><p class="section-sub">These sample recommendations illustrate the product. Actual tips are generated from the inputs you submit.</p></div>
+ <div class="recommend-grid"><article class="recommend-card reveal"><span class="priority high">HIGH IMPACT</span><div class="recommend-icon">⌘</div><h3>Improve your GitHub README</h3><p>Make project goals, setup, and your contribution easy to understand.</p><div class="impact">Potential impact <b>Clearer project story</b></div><button class="recommend-more" data-rec="GitHub README" type="button">View example action ↗</button></article><article class="recommend-card reveal"><span class="priority high">HIGH IMPACT</span><div class="recommend-icon pink-rec">▤</div><h3>Add measurable resume achievements</h3><p>Show outcomes with scope, numbers, and the choices you made.</p><div class="impact">Potential impact <b>Stronger evidence</b></div><button class="recommend-more" data-rec="Resume achievements" type="button">View example action ↗</button></article><article class="recommend-card reveal"><span class="priority medium">QUICK WIN</span><div class="recommend-icon blue-rec">in</div><h3>Sharpen your LinkedIn headline</h3><p>State your focus and strongest skill in plain language.</p><div class="impact">Potential impact <b>Clearer positioning</b></div><button class="recommend-more" data-rec="LinkedIn headline" type="button">View example action ↗</button></article><article class="recommend-card reveal"><span class="priority medium">QUICK WIN</span><div class="recommend-icon cyan-rec">◎</div><h3>Add project demonstrations</h3><p>Give visitors a live demo or a few screenshots of your work.</p><div class="impact">Potential impact <b>More visible work</b></div><button class="recommend-more" data-rec="Project demonstrations" type="button">View example action ↗</button></article></div>
+</div></section>
+<div class="divider-line"></div>
+<section class="terminal-section" aria-labelledby="terminal-heading"><div class="section-wrap"><div class="terminal-card reveal"><div class="terminal-top"><span class="term-dots"><i></i><i></i><i></i></span><b id="terminal-heading">PORTFOLIO.AI · DEMO CONSOLE</b><span>ILLUSTRATIVE</span></div><div class="terminal-body" id="terminalBody"><p><i>$</i> Portfolio.AI demo engine initialized<span> ✓</span></p><p><i>$</i> Awaiting your profile inputs<span class="cursor-blink">_</span></p></div><div class="terminal-foot">Simulation only · Running a review submits only the fields you choose.</div></div></div></section>
+<div class="divider-line"></div>
+<section class="dash-preview-section" aria-labelledby="dashboard-heading"><div class="section-wrap"><div class="section-head reveal"><p class="section-eyebrow">Report preview</p><h2 class="section-title" id="dashboard-heading">A useful report, not a mystery score.</h2><p class="section-sub">The live review includes module-level signals, suggestions, and a clear note on how the score was formed.</p></div><div class="report-preview reveal"><div class="report-head"><div><span class="sample-chip">ILLUSTRATIVE REPORT PREVIEW</span><h3>Career presence snapshot</h3><p>Example interface · not personal evaluation data</p></div><div class="report-total"><strong>87</strong><small>/100</small></div></div><div class="report-modules"><div><span>GitHub</span><b>91</b><i><em data-width="91"></em></i></div><div><span>Resume</span><b>84</b><i><em data-width="84"></em></i></div><div><span>LinkedIn</span><b>82</b><i><em data-width="82"></em></i></div><div><span>Portfolio</span><b>90</b><i><em data-width="90"></em></i></div></div><div class="report-lists"><div><h4>✓ Example strengths</h4><p>Strong Python signals · Project details · Active public profile</p></div><div><h4>↗ Example next steps</h4><p>Add measurable achievements · Clarify profile headline</p></div></div></div></div></section>
+
+<div class="divider-line"></div>
+
+<!-- ── CTA ── -->
+<section style="padding:4rem 1.5rem" aria-labelledby="cta-heading">
+  <div class="section-wrap">
+    <div class="cta-wrap reveal-scale">
+      <h2 id="cta-heading">Ready to Level Up Your Career?</h2>
+      <p>Start your evaluation today — it takes less than 2 minutes, completely free.</p>
+      <a href="#evaluate" class="cta-glow evaluate-open">
+        <i class="fas fa-rocket" aria-hidden="true"></i>
+        Evaluate My Portfolio
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer role="contentinfo">
+  <p>&copy; 2026 <span>Portfolio.AI</span> &nbsp;·&nbsp; Built with Flask · CSS Grid · Glassmorphism · Canvas API</p>
+</footer>
+
+
+<div class="loading-screen" id="loadingScreen" aria-hidden="true"><div class="loading-mark">✳</div><b>Portfolio<span>.AI</span></b><small>PORTFOLIO REVIEW</small><div class="loading-track"><i></i></div><span class="loading-ready">SYSTEM READY ✓</span></div>
+<div class="cursor-glow" aria-hidden="true"></div>
+<div class="app-modal" id="evaluateModal" role="dialog" aria-modal="true" aria-labelledby="evalTitle"><div class="app-modal-card"><header class="modal-head"><div><p class="section-eyebrow">Portfolio review</p><h2 id="evalTitle">Evaluate your signals</h2><p>Enter one or more fields. Only the signals you provide are reviewed.</p></div><button class="modal-close" data-close-modal aria-label="Close dialog">×</button></header><form id="evalForm" novalidate>
+<label>Name for this report <span>optional</span><input name="name" maxlength="80" placeholder="e.g. My portfolio"></label>
+<label>GitHub username or profile URL <span>optional</span><input id="githubInput" name="github" placeholder="octocat or github.com/octocat"><span class="signal-status" data-signal-status="github">○ Not provided</span></label>
+<div class="resume-field"><label for="resumeText">Resume PDF or text <span>optional · up to 5 MB PDF</span></label>
+<div class="resume-dropzone" id="resumeDropzone" role="button" tabindex="0" aria-describedby="resumeUploadHint"><input type="file" name="resume_file" id="resumeFile" accept=".pdf,application/pdf" hidden><div class="drop-icon">▤</div><div><b>Upload your Resume PDF</b><small>Drag and drop here, or <span>choose a PDF</span></small><small id="resumeUploadHint">PDF only · Maximum 5 MB · processed privately in memory</small></div></div>
+<div class="resume-file-meta" id="resumeFileMeta" hidden><span class="file-check">✓</span><span class="file-name" id="resumeFileName"></span><button type="button" id="removeResume" aria-label="Remove uploaded resume">Remove</button></div>
+<div class="upload-progress" id="uploadProgress" hidden><i id="uploadProgressBar"></i></div><p class="upload-progress-label" id="uploadProgressLabel" hidden></p>
+<div class="text-divider"><span>or paste resume text / summary</span></div><textarea id="resumeText" name="resume" maxlength="40000" placeholder="Summarize or paste your experience, projects, skills, and education…"></textarea><small class="field-note">The original PDF and raw resume text are not saved. Resume feedback uses a transparent local checklist.</small><span class="signal-status" data-signal-status="resume">○ Not provided</span></div>
+<label>LinkedIn profile URL <span>optional · URL check only</span><input id="linkedinInput" name="linkedin" placeholder="linkedin.com/in/your-name"><span class="signal-status" data-signal-status="linkedin">○ Not provided</span></label><label class="linkedin-summary-field">LinkedIn profile text <span>optional · for an actual content review</span><textarea id="linkedinSummary" name="linkedin_summary" maxlength="12000" placeholder="Paste your headline, About, experience, and skills text…"></textarea><small class="field-note">LinkedIn pages are not scraped. Only text you paste here is analyzed, and the raw text is not saved.</small></label>
+<label>Portfolio website URL <span>optional</span><input id="portfolioInput" name="portfolio" placeholder="yourname.dev"><span class="signal-status" data-signal-status="portfolio">○ Not provided</span></label>
+<div id="evalError" class="eval-error" role="alert"></div><button class="btn-nav eval-submit" type="submit">Generate my review <span>→</span></button><p class="modal-privacy">At least one signal is enough. Only provided signals are processed; unavailable sources are reported rather than invented.</p></form>
+<div class="analysis-state" id="analysisState" hidden aria-live="polite"><div class="analysis-spinner"></div><h3>Analyzing your career signals…</h3><p id="analysisMessage">Checking the sources you provided.</p><ul id="analysisSteps"><li>Checking provided sources</li><li>Extracting supported evidence</li><li>Reviewing skills and projects</li><li>Preparing recommendations</li></ul><div class="analysis-meter"><i id="analysisMeter"></i></div><small>Results are based only on data this demo can actually retrieve or read.</small></div>
+<div id="evalResult" class="eval-result" aria-live="polite"></div></div></div>
+<div class="app-modal" id="infoModal" role="dialog" aria-modal="true" aria-labelledby="infoTitle"><div class="app-modal-card info-card"><header class="modal-head"><div><p class="section-eyebrow">Portfolio.AI guide</p><h2 id="infoTitle">About this signal</h2></div><button class="modal-close" data-close-modal aria-label="Close dialog">×</button></header><div class="info-content" id="infoContent"></div><button class="btn-nav evaluate-open" type="button">Run your actual review ↗</button></div></div>
+
+<script>
+/* ── 1. Particle Network (Canvas) ── */
+(function(){
+  const canvas = document.getElementById('bgCanvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+  const N = window.matchMedia('(max-width: 700px)').matches ? 22 : 46, CONN = 130;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function resize(){
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    W = window.innerWidth; H = window.innerHeight;
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  class Particle {
+    constructor(){this.reset()}
+    reset(){
+      this.x = Math.random()*W; this.y = Math.random()*H;
+      this.vx = (Math.random()-.5)*.4; this.vy = (Math.random()-.5)*.4;
+      this.r = 1.5+Math.random()*1.5;
+      this.color = ['rgba(246,92,123,','rgba(212,169,91,','rgba(226,188,114,'][Math.floor(Math.random()*3)];
+    }
+    update(){
+      this.x+=this.vx; this.y+=this.vy;
+      if(this.x<0||this.x>W) this.vx*=-1;
+      if(this.y<0||this.y>H) this.vy*=-1;
+    }
+    draw(){
+      ctx.beginPath();
+      ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+      ctx.fillStyle=this.color+'0.6)';
+      ctx.fill();
+    }
+  }
+  for(let i=0;i<N;i++) particles.push(new Particle());
+  function draw(){
+    if(reducedMotion){ ctx.clearRect(0,0,W,H); return; }
+    if(document.hidden){ requestAnimationFrame(draw); return; }
+    ctx.clearRect(0,0,W,H);
+    for(let i=0;i<N;i++){
+      particles[i].update();
+      particles[i].draw();
+      for(let j=i+1;j<N;j++){
+        const dx=particles[i].x-particles[j].x, dy=particles[i].y-particles[j].y;
+        const dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<CONN){
+          const alpha=(1-dist/CONN)*0.2;
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x,particles[i].y);
+          ctx.lineTo(particles[j].x,particles[j].y);
+          ctx.strokeStyle=`rgba(246,92,123,${alpha})`;
+          ctx.lineWidth=.8;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ── 2. Typing Effect ── */
+(function(){
+  const texts = ['Portfolio Signals','GitHub Profile','Resume Evidence','LinkedIn URL','Career Goals'];
+  const el = document.getElementById('typeTarget');
+  if(!el) return;
+  let ti=0, ci=0, deleting=false;
+  function type(){
+    const current = texts[ti];
+    if(!deleting){
+      el.textContent = current.slice(0, ++ci);
+      if(ci===current.length){ deleting=true; setTimeout(type,1800); return; }
+    } else {
+      el.textContent = current.slice(0, --ci);
+      if(ci===0){ deleting=false; ti=(ti+1)%texts.length; }
+    }
+    setTimeout(type, deleting?60:90);
+  }
+  setTimeout(type, 1200);
+})();
+
+/* ── 3. Intersection Observer — scroll reveal ── */
+(function(){
+  const obs = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  },{threshold:0.12});
+  document.querySelectorAll('.reveal,.reveal-l,.reveal-r,.reveal-scale').forEach(el=>obs.observe(el));
+})();
+
+/* ── 4. Counter Animation ── */
+(function(){
+  const countObs = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting) return;
+      const el=e.target, target=+el.dataset.target, dur=1800, start=performance.now();
+      const suffix = el.dataset.suffix || '';
+      function tick(now){
+        const p=Math.min((now-start)/dur,1);
+        const ease=1-Math.pow(1-p,4);
+        el.textContent=Math.floor(ease*target)+suffix;
+        if(p<1) requestAnimationFrame(tick);
+        else el.textContent=target+suffix;
+      }
+      requestAnimationFrame(tick);
+      countObs.unobserve(el);
+    });
+  },{threshold:0.6});
+  document.querySelectorAll('.stat-num[data-target]').forEach(el=>countObs.observe(el));
+})();
+
+/* ── 5. 3D Card Tilt ── */
+(function(){
+  document.querySelectorAll('.feat-card').forEach(card=>{
+    card.addEventListener('mousemove',e=>{
+      const r=card.getBoundingClientRect();
+      const x=(e.clientX-r.left)/r.width-.5;
+      const y=(e.clientY-r.top)/r.height-.5;
+      card.style.transform=`translateY(-8px) rotateX(${-y*8}deg) rotateY(${x*8}deg)`;
+    });
+    card.addEventListener('mouseleave',()=>{
+      card.style.transform='';
+    });
+  });
+})();
+
+/* ── 6. Active nav on scroll ── */
+(function(){
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll',()=>{
+    let cur='';
+    sections.forEach(s=>{
+      if(window.scrollY>=s.offsetTop-120) cur=s.id;
+    });
+    links.forEach(a=>{
+      a.classList.remove('active');
+      if(a.getAttribute('href')==='#'+cur) a.classList.add('active');
+    });
+  });
+})();
+
+/* ── Portfolio.AI 2.0 interactions ── */
+(function(){
+ const root=document.documentElement, themeButton=document.getElementById('themeToggle');
+ const saved=localStorage.getItem('portfolio-ai-theme'); if(saved==='light'||saved==='dark')root.dataset.theme=saved;
+ function syncTheme(){const light=root.dataset.theme==='light',icon=document.getElementById('themeIcon'),label=document.getElementById('themeLabel');icon.className=light?'fas fa-moon':'fas fa-sun';label.textContent=light?'Dark mode':'Light mode';themeButton.setAttribute('aria-label',light?'Switch to dark mode':'Switch to light mode');themeButton.setAttribute('aria-pressed',String(light));}
+ syncTheme();themeButton.addEventListener('click',()=>{root.dataset.theme=root.dataset.theme==='light'?'dark':'light';localStorage.setItem('portfolio-ai-theme',root.dataset.theme);syncTheme()});
+ const menu=document.getElementById('menuToggle'),navLinks=document.querySelector('.nav-links');
+ menu.addEventListener('click',()=>{const open=navLinks.classList.toggle('open');menu.setAttribute('aria-expanded',String(open));menu.setAttribute('aria-label',open?'Close navigation menu':'Open navigation menu');menu.textContent=open?'×':'☰'});
+ navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{navLinks.classList.remove('open');menu.setAttribute('aria-expanded','false');menu.textContent='☰'}));
+ const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ const loadingScreen=document.getElementById('loadingScreen');setTimeout(()=>loadingScreen.classList.add('done'),reduce?120:900);
+ if(!reduce&&matchMedia('(pointer:fine)').matches){let pending=false,mx=0,my=0;window.addEventListener('pointermove',e=>{mx=e.clientX;my=e.clientY;if(!pending){pending=true;requestAnimationFrame(()=>{document.documentElement.style.setProperty('--mx',mx+'px');document.documentElement.style.setProperty('--my',my+'px');pending=false})}},{passive:true});document.querySelectorAll('.feat-card').forEach(card=>{card.addEventListener('pointermove',e=>{const r=card.getBoundingClientRect();card.style.setProperty('--px',((e.clientX-r.left)/r.width*100)+'%');card.style.setProperty('--py',((e.clientY-r.top)/r.height*100)+'%')})})}
+ const animated=new WeakSet();const animObs=new IntersectionObserver(entries=>entries.forEach(entry=>{if(!entry.isIntersecting||animated.has(entry.target))return;animated.add(entry.target);const el=entry.target;
+  el.querySelectorAll('.score-ring[data-score]').forEach(ring=>{const target=+ring.dataset.score,b=ring.querySelector('b'),duration=1100,start=performance.now();function tick(now){const p=Math.min((now-start)/duration,1),value=Math.round(target*(1-Math.pow(1-p,3)));b.textContent=value;ring.style.background=`conic-gradient(var(--ring-color,#ff91a7) ${value*3.6}deg,rgba(255,255,255,.09) 0)`;if(p<1)requestAnimationFrame(tick)}requestAnimationFrame(tick)});
+  el.querySelectorAll('[data-width]').forEach((bar,i)=>setTimeout(()=>bar.style.width=bar.dataset.width+'%',i*70));
+  const gauge=el.querySelector('.readiness-gauge');if(gauge){const target=+gauge.dataset.score,b=gauge.querySelector('b'),duration=1250,start=performance.now();function tick(now){const p=Math.min((now-start)/duration,1),v=Math.round(target*(1-Math.pow(1-p,3)));b.textContent=v;gauge.style.background=`conic-gradient(#ff91a7 ${v*3.6}deg,rgba(255,255,255,.08) 0)`;if(p<1)requestAnimationFrame(tick)}requestAnimationFrame(tick)}
+  if(el.id==='terminalBody'){const lines=['$ Connecting to public GitHub profile…','> Repository signals ready ✓','$ Checking resume structure…','> Common content signals reviewed ✓','$ LinkedIn paste + public portfolio signals checked ✓','$ Report suggestions prepared ✓'];let i=0;function add(){if(i>=lines.length)return;const p=document.createElement('p');p.textContent=lines[i];p.style.color=lines[i].startsWith('>')?'#dbbf7e':'#d3cbba';el.appendChild(p);i++;setTimeout(add,reduce?10:430)}setTimeout(add,250)}
+ }),{threshold:.2});document.querySelectorAll('.features-grid,.readiness-grid,.jobs-grid,.skills-grid,.recommend-grid,.report-preview,#terminalBody').forEach(el=>animObs.observe(el));
+ const scanButton=document.getElementById('scanButton'),scanBoard=document.getElementById('scanBoard'),scanStatus=document.getElementById('scanStatus'),scanProgress=document.getElementById('scanProgress'),scanResult=document.getElementById('scanResult');let scanTimer;
+ scanButton.addEventListener('click',()=>{clearTimeout(scanTimer);scanBoard.classList.add('scanning');scanResult.classList.remove('visible');document.querySelectorAll('.scan-source').forEach(x=>x.classList.remove('active'));const steps=['Connecting profile signals…','Reviewing public GitHub metadata…','Checking resume structure…','Preparing example insights…','Demo sequence complete ✓'];let n=0;scanButton.disabled=true;scanButton.textContent='◌  Running demo…';function step(){if(n>=steps.length){scanBoard.classList.remove('scanning');scanResult.classList.add('visible');scanButton.disabled=false;scanButton.textContent='↻  Replay demo';return}scanStatus.textContent=steps[n];scanProgress.style.width=((n+1)/steps.length*100)+'%';const sources=document.querySelectorAll('.scan-source');if(n>0&&n<5)sources[(n-1)%sources.length].classList.add('active');n++;scanTimer=setTimeout(step,reduce?100:780)}step()});
+ const modal=document.getElementById('evaluateModal'),infoModal=document.getElementById('infoModal'),evalForm=document.getElementById('evalForm'),evalError=document.getElementById('evalError'),evalResult=document.getElementById('evalResult');let lastFocus=null;
+ function showModal(el){lastFocus=document.activeElement;el.classList.add('open');document.body.style.overflow='hidden';const focus=el.querySelector('input,button');if(focus)setTimeout(()=>focus.focus(),40)}
+ function hideModal(el){el.classList.remove('open');document.body.style.overflow='';if(lastFocus&&lastFocus.focus)lastFocus.focus()}
+ document.querySelectorAll('.evaluate-open').forEach(button=>button.addEventListener('click',e=>{e.preventDefault();navLinks.classList.remove('open');showModal(modal)}));document.querySelectorAll('[data-close-modal]').forEach(button=>button.addEventListener('click',()=>hideModal(button.closest('.app-modal'))));document.querySelectorAll('.app-modal').forEach(el=>el.addEventListener('click',e=>{if(e.target===el)hideModal(el)}));document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.app-modal.open').forEach(hideModal)});
+ const detail={github:'GitHub: this app reads public profile details and up to 100 public repositories via GitHub’s REST API. Suggestions cover profile completeness and project presentation.',resume:'Resume: paste text or upload a text-based PDF up to 5 MB. pypdf extracts PDF text in memory; a local rules-based checklist looks for common sections, skill mentions, and impact evidence. The original PDF and raw text are not saved.',linkedin:'LinkedIn: the URL is validated but the page is not scraped. Paste your headline, About, experience, and skills text for an actual rules-based content review; pasted text is not saved.',portfolio:'Portfolio: a public HTTP/HTTPS page is checked for title, description, headings, text volume, project/contact cues, HTTPS, and viewport metadata. Reads are capped at 500 KB, redirects and private hosts are blocked; no JavaScript or visual audit is performed.'};
+ document.querySelectorAll('.feature-more').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();document.getElementById('infoTitle').textContent=b.textContent.replace('↗','').trim();document.getElementById('infoContent').textContent=detail[b.dataset.module]||'';showModal(infoModal)}));
+ document.querySelectorAll('.feat-card').forEach(card=>card.addEventListener('click',e=>{if(e.target.closest('button'))return;const b=card.querySelector('.feature-more');if(b)b.click()}));
+ document.querySelectorAll('.job-detail').forEach(b=>b.addEventListener('click',()=>{document.getElementById('infoTitle').textContent=b.dataset.job+' · demo match';document.getElementById('infoContent').textContent='This percentage and skill list are illustrative sample content only. Job matches are not currently calculated by the backend. Use the evaluation form for real profile-based checklist feedback.';showModal(infoModal)}));document.querySelectorAll('.recommend-more').forEach(b=>b.addEventListener('click',()=>{document.getElementById('infoTitle').textContent=b.dataset.rec+' · example';document.getElementById('infoContent').textContent='This is a sample recommendation to demonstrate the interface. Actual recommendations from a submitted review are based on the signals the backend can check, and are shown in the generated report.';showModal(infoModal)}));
+ function esc(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+ const fileInput=document.getElementById('resumeFile'),dropzone=document.getElementById('resumeDropzone'),fileMeta=document.getElementById('resumeFileMeta'),fileName=document.getElementById('resumeFileName'),resumeText=document.getElementById('resumeText'),removeFile=document.getElementById('removeResume'),uploadProgress=document.getElementById('uploadProgress'),uploadProgressBar=document.getElementById('uploadProgressBar'),uploadProgressLabel=document.getElementById('uploadProgressLabel'),analysisState=document.getElementById('analysisState'),analysisSteps=[...document.querySelectorAll('#analysisSteps li')],analysisMeter=document.getElementById('analysisMeter'),analysisMessage=document.getElementById('analysisMessage');
+ const maxPdfBytes=5*1024*1024;
+ function signalProvided(key){if(key==='resume')return Boolean((fileInput.files&&fileInput.files[0])||resumeText.value.trim());if(key==='linkedin')return Boolean(document.getElementById('linkedinInput').value.trim()||document.getElementById('linkedinSummary').value.trim());const el=document.querySelector(`[data-signal-input="${key}"]`)||({github:document.getElementById('githubInput'),portfolio:document.getElementById('portfolioInput')}[key]);return Boolean(el&&el.value.trim())}
+ function updateSignalStatuses(){document.querySelectorAll('[data-signal-status]').forEach(badge=>{const key=badge.dataset.signalStatus,yes=signalProvided(key);badge.classList.toggle('provided',yes);badge.textContent=yes?`✓ ${key==='resume'?(fileInput.files[0]?'PDF selected':'Text provided'):key==='linkedin'?(document.getElementById('linkedinSummary').value.trim()?'Profile text provided':'URL provided · format check'):'Provided · source check'}`:'○ Not provided'})}
+ function setResumeFile(file){if(!file)return;if(!file.name.toLowerCase().endsWith('.pdf')||(file.type&&file.type!=='application/pdf'&&file.type!=='application/octet-stream')){fileInput.value='';fileMeta.hidden=true;fileName.textContent='';updateSignalStatuses();evalError.textContent='Please choose a PDF file for the resume.';evalError.style.display='block';return}if(file.size>maxPdfBytes){fileInput.value='';fileMeta.hidden=true;fileName.textContent='';updateSignalStatuses();evalError.textContent='Resume PDF must be 5 MB or smaller.';evalError.style.display='block';return}evalError.style.display='none';fileName.textContent=`${file.name} · ${(file.size/1024/1024).toFixed(2)} MB`;fileMeta.hidden=false;uploadProgress.hidden=true;uploadProgressLabel.hidden=true;updateSignalStatuses()}
+ fileInput.addEventListener('change',()=>setResumeFile(fileInput.files[0]));dropzone.addEventListener('click',e=>{if(e.target!==fileInput)fileInput.click()});dropzone.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();fileInput.click()}});['dragenter','dragover'].forEach(type=>dropzone.addEventListener(type,e=>{e.preventDefault();dropzone.classList.add('drag-over')}));['dragleave','drop'].forEach(type=>dropzone.addEventListener(type,e=>{e.preventDefault();dropzone.classList.remove('drag-over')}));dropzone.addEventListener('drop',e=>{const file=e.dataTransfer.files[0];if(!file)return;try{const transfer=new DataTransfer();transfer.items.add(file);fileInput.files=transfer.files;setResumeFile(file)}catch{evalError.textContent='This browser could not attach the file. Use Choose PDF instead.';evalError.style.display='block'}});removeFile.addEventListener('click',()=>{fileInput.value='';fileMeta.hidden=true;fileName.textContent='';uploadProgress.hidden=true;uploadProgressLabel.hidden=true;updateSignalStatuses()});
+ ['githubInput','linkedinInput','linkedinSummary','portfolioInput','resumeText'].forEach(id=>document.getElementById(id).addEventListener('input',updateSignalStatuses));updateSignalStatuses();
+ function resetAnalysis(){analysisSteps.forEach(x=>x.classList.remove('done','active'));analysisMeter.style.width='5%';analysisMessage.textContent='Checking the sources you provided.'}
+ function renderReport(data){
+  const hasScore=data.score!==null&&data.score!==undefined&&Number.isFinite(Number(data.score));
+  const names={github:'GitHub',resume:'Resume',linkedin:'LinkedIn',portfolio:'Portfolio'};
+  const sourceOrder=['github','resume','linkedin','portfolio'];
+  const sourceRows=sourceOrder.map(key=>{const status=data.source_status?.[key]||{status:'not_provided',label:'Not provided'};const ok=['analyzed','link_checked'].includes(status.status);return `<div class="source-chip ${ok?'source-ok':status.status==='unavailable'?'source-warn':''}"><span>${ok?'✓':status.status==='unavailable'?'!':'○'}</span><b>${names[key]}</b><small>${esc(status.label||'Not provided')}</small></div>`}).join('');
+  const moduleCards=Object.entries(data.modules||{}).map(([key,m])=>`<article class="dashboard-module"><header><b>${names[key]||esc(key)}</b><strong>${Number(m.score)||0}<small>/100</small></strong></header><p>${esc(m.summary||'')}</p><div class="module-scope">${esc(m.analysis_scope||'')}</div></article>`).join('')||'<p class="result-muted">No source content was available to score. See the signal summary and next steps below.</p>';
+  const scoreGauge=hasScore?`<div class="result-gauge" style="--score:${Math.max(0,Math.min(100,Number(data.score)||0))}"><div><b>${Number(data.score)}</b><small>/100</small></div></div>`:'<div class="result-gauge no-score"><div><b>—</b><small>no score</small></div></div>';
+  const overallCopy=hasScore?`Average of ${Object.keys(data.modules||{}).length} scorable module(s). Link-only checks do not contribute.`:'No overall score: none of the provided sources returned scorable content.';
+  const skills=(data.skills||[]).map(skill=>`<span class="evidence-skill"><b>${esc(skill.name)}</b><small>${esc(skill.sources.join(' + '))}</small></span>`).join('');
+  const gaps=(data.skill_gaps||[]).map(g=>`<span class="gap-skill" title="${esc(g.basis)}">${esc(g.name)}<small>Not seen in supplied text</small></span>`).join('');
+  const projects=(data.projects||[]).map(project=>`<article class="project-evidence"><header><b>${esc(project.name)}</b><span>${esc(project.technology)}</span></header><p>${esc(project.description)}</p><div class="project-facts"><span>${esc(project.complexity_proxy)} · ${Number(project.repository_size_kb)||0} KB</span><span>${Number(project.stars)||0} public stars</span><span>${esc(project.documentation)}</span><span>README signal ${Number(project.readme_quality_score)||0}/100</span></div><div class="project-meter"><i style="width:${Math.max(0,Math.min(100,Number(project.readme_quality_score)||0))}%"></i></div></article>`).join('');
+  const readiness=(data.readiness||[]).map(item=>`<div class="readiness-result"><div><b>${esc(item.category)}</b><strong>${Number(item.score)||0}%</strong></div><i><em style="width:${Math.max(0,Math.min(100,Number(item.score)||0))}%"></em></i><small>${esc(item.basis)}</small></div>`).join('');
+  const tips=(data.tips||[]).map(t=>`<li><b>${names[t.module]||esc(t.module)}:</b> ${esc(t.text)}<small>Evidence: ${esc(t.basis||'')}</small></li>`).join('');
+  const warnings=(data.warnings||[]).map(w=>`<div class="result-warning">${esc(w)}</div>`).join('');
+  const cross=data.cross_signal?`<div class="cross-signal"><b>Cross-signal skill evidence</b><p>${esc(data.cross_signal.summary)}</p>${data.cross_signal.shared_skills.map(x=>`<span>${esc(x)}</span>`).join('')}<small>${esc(data.cross_signal.basis)}</small></div>`:'';
+  const skillBlock=skills?`<section class="result-section"><h3>Skills found in submitted evidence</h3><p class="result-muted">Evidence presence only, not a proficiency rating.</p><div class="evidence-skills">${skills}</div>${cross}</section>`:'';
+  const gapBlock=gaps?`<section class="result-section"><h3>Skills not named in the supplied resume text</h3><p class="result-muted">This is not evidence that you lack these skills.</p><div class="evidence-skills">${gaps}</div></section>`:'';
+  const projectBlock=projects?`<section class="result-section"><h3>Public project evidence</h3><p class="result-muted">Based on repository metadata; the “size” value is only a repository-size proxy, not code complexity.</p><div class="project-list">${projects}</div></section>`:'';
+  evalResult.innerHTML=`${warnings}<div class="dashboard-hero">${scoreGauge}<div><span class="report-kicker">${hasScore?'EVIDENCE SCORE · PROVIDED SIGNALS ONLY':'SOURCE CHECK · NO SCORE GENERATED'}</span><h3>${esc(data.name)}'s review</h3><p>${overallCopy}</p><small>Report ${esc(data.id)}</small></div></div><section class="result-section"><h3>Signal summary</h3><div class="source-summary">${sourceRows}</div></section><section class="result-section"><h3>Individual source analysis</h3><div class="dashboard-modules">${moduleCards}</div></section>${skillBlock}${gapBlock}${projectBlock}${readiness?`<section class="result-section"><h3>Career readiness evidence</h3><div class="readiness-list">${readiness}</div></section>`:''}<section class="result-section"><h3>Evidence-based next steps</h3><ul class="result-tips">${tips||'<li>No additional recommendations were produced for the available sources.</li>'}</ul></section><p class="result-disclaimer">${esc(data.disclaimer)}</p><div class="result-actions"><button class="theme-toggle" type="button" id="editReport">Edit inputs</button><button class="btn-nav" type="button" id="newReport">New review</button></div>`;
+  analysisState.hidden=true;evalForm.style.display='none';evalResult.classList.add('visible');document.getElementById('evalTitle').textContent='Your review is ready';document.getElementById('editReport').onclick=()=>{evalForm.style.display='block';evalResult.classList.remove('visible');document.getElementById('evalTitle').textContent='Evaluate your signals'};document.getElementById('newReport').onclick=()=>{evalForm.reset();fileMeta.hidden=true;fileName.textContent='';uploadProgress.hidden=true;uploadProgressLabel.hidden=true;updateSignalStatuses();evalForm.style.display='block';evalResult.classList.remove('visible');evalResult.innerHTML='';document.getElementById('evalTitle').textContent='Evaluate your signals'};
+ }
+ evalForm.addEventListener('submit',e=>{e.preventDefault();evalError.style.display='none';const anySignal=['github','resume','linkedin','portfolio'].some(signalProvided);if(!anySignal){evalError.textContent='Please provide at least one signal to generate your review.';evalError.style.display='block';document.getElementById('githubInput').focus();return}
+  const submit=evalForm.querySelector('[type=submit]');submit.disabled=true;submit.textContent='Analyzing your profile…';evalForm.style.display='none';evalResult.classList.remove('visible');analysisState.hidden=false;resetAnalysis();if(fileInput.files[0]){uploadProgress.hidden=false;uploadProgressLabel.hidden=false;uploadProgressBar.style.width='0%';uploadProgressLabel.textContent='Preparing PDF upload…'}
+  let stage=0;analysisSteps[0].classList.add('active');const stageTimer=setInterval(()=>{if(stage<2){analysisSteps[stage].classList.remove('active');analysisSteps[stage].classList.add('done');stage++;analysisSteps[stage].classList.add('active');analysisMeter.style.width=(25+stage*18)+'%';analysisMessage.textContent=['Checking the sources you provided.','Extracting supported evidence.','Reviewing the available signals.'][stage]||'Reviewing the available signals.'}},850);
+  const body=new FormData();for(const key of ['name','github','resume','linkedin','linkedin_summary','portfolio']){const input=evalForm.elements[key];if(input&&input.value.trim())body.append(key,input.value.trim())}if(fileInput.files[0])body.append('resume_file',fileInput.files[0]);
+  const xhr=new XMLHttpRequest();xhr.open('POST','/api/evaluate');xhr.responseType='json';xhr.timeout=45000;xhr.upload.onprogress=e=>{if(e.lengthComputable&&fileInput.files[0]){const pct=Math.round(e.loaded/e.total*100);uploadProgressBar.style.width=pct+'%';uploadProgressLabel.textContent=`Uploading PDF · ${pct}%`;if(pct===100)uploadProgressLabel.textContent='PDF received · extracting text privately…'}};
+  const fail=message=>{clearInterval(stageTimer);analysisState.hidden=true;evalForm.style.display='block';evalError.textContent=message;evalError.style.display='block';submit.disabled=false;submit.textContent='Generate my review →'};
+  xhr.onload=()=>{clearInterval(stageTimer);const data=xhr.response||{};if(xhr.status<200||xhr.status>=300){fail(data.error||'Could not create your review.');return}analysisSteps.forEach(item=>{item.classList.remove('active');item.classList.add('done')});analysisMeter.style.width='100%';analysisMessage.textContent='Review complete · only returned evidence is shown.';if(fileInput.files[0]){uploadProgressBar.style.width='100%';uploadProgressLabel.textContent='PDF text extracted in memory · original file not saved'}submit.disabled=false;submit.textContent='Generate my review →';renderReport(data)};
+  xhr.onerror=()=>fail('Could not connect to the evaluation service. Please try again.');xhr.ontimeout=()=>fail('The evaluation timed out. Please try again or submit fewer sources.');xhr.onabort=()=>fail('The request was cancelled. Please try again.');xhr.send(body);
+ });
+ // Update the network animation only for non-reduced-motion visitors; keep the canvas responsive and low-cost.
+})();
+
+</script>
+</body>
+</html>
